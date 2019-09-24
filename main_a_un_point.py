@@ -22,6 +22,5 @@ while True :
     dist = distance_suiveur.distance()
     vitesse = max(min(50, a*(dist-D)) , 0)
     pilote_suiveur.forwardRelative(vitesse)
-    #print(dist)
     wait(Ts)
     #vitesse : %(𝑡 + 𝑇𝑠) = max(min(50, 𝑎 × (𝑑(𝑡) − 𝐷)) , 0)
