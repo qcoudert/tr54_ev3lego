@@ -16,4 +16,4 @@ class RobotStatus:
         return self.distance
 
     def toString(self):
-        return str(time.time()) + ";" + str(self.distance) + ";" + str(self.color) +"\n"
+        return str(time.time()) + ";" + str(self.getDistance) + ";" + str(self.getColor) +"\n"
