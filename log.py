@@ -2,4 +2,5 @@ import csv
 
 class Log:
 
-    //TODO
+    def __init__:
+        print('Hello')
