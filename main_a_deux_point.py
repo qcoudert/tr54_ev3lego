@@ -16,11 +16,12 @@ distance_suiveur = distance_sensor.DistanceSensor()
 D = 5
 Ts = 10
 a = 2
-
+vitesse = 0
 
 while(1) :
     dist = distance_suiveur.distance()
-    vitesse = max(min(50, a*(dist-D)) , 0)
+    vitesse = min(   max(2.5*(dist-20),min(max(a*(dist-D),0),vitesse)),50   )
     pilote_suiveur.forwardRelative(vitesse)
+    #print(dist)
     wait(Ts)
     #vitesse : %(𝑡 + 𝑇𝑠) = max(min(50, 𝑎 × (𝑑(𝑡) − 𝐷)) , 0)
