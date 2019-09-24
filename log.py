@@ -6,7 +6,7 @@ class Log :
     def __init__(self, robot_status) :
         self.file = open("logs.csv","w+")
         self.file.write("Time;Distance;Couleur\n")
-        self.robot_status = robot
+        self.robot_status = robot_status
         
-    def writeLog():
+    def writeLog(self):
         self.file.write(self.robot_status.toString())
