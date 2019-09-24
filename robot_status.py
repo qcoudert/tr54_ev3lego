@@ -1,3 +1,4 @@
+import time
 class RobotStatus:
 
     def __init__(self, color, distance):
@@ -15,4 +16,4 @@ class RobotStatus:
         return self.distance
 
     def toString(self):
-        return "Distance: " + str(self.distance) + "\nCouleur: " + str(self.color)
+        return str(time.time()) + ";" + str(self.distance) + ";" + str(self.color) +"\n"
