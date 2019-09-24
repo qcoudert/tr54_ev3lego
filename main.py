@@ -16,6 +16,12 @@ print(sys.version)
 
 pilote_suiveur_run = pilot.Pilot()
 pilote_suiveur_distance = distance_sensor.DistanceSensor()
-pilote_suiveur_run.forward(80)
-print(str(pilote_suiveur_distance.distance))
-wait(1000)
+
+while(1):
+    dist = pilote_suiveur_distance.distance()
+    pilote_suiveur_run.forwardRelative(50)
+    print(dist)
+    if(dist<=29):
+        pilote_suiveur_run.stop()
+
+
