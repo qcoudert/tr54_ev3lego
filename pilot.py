@@ -12,6 +12,11 @@ class Pilot:
         self.left_motor.run(speed)
         self.right_motor.run(speed)
 
+    def forwardRelative(self, speedPercentage):
+        s = 850 * (speedPercentage/100)
+        self.left_motor.run(s)
+        self.right_motor.run(s)
+
     def rotate(self, angle, aSpeed):
         self.left_motor.run_target(aSpeed, angle, Stop.BRAKE, False)
         self.right_motor.run_target(aSpeed, -angle, Stop.BRAKE, True)
