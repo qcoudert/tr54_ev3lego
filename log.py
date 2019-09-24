@@ -1,6 +1,11 @@
 import csv
 
-class Log:
+import sys
 
-    def __init__:
-        print('Hello')
+class Log :
+    def __init__(self, robot_status) :
+        self.file = open("logs.csv","w+")
+        self.robot_status = robot
+        
+    def writeLog():
+        self.file.write(self.robot_status.toString())
