@@ -9,4 +9,5 @@ class DistanceSensor:
     
     
     def distance(self):
-        return self.sensor.distance()
+        #Infra
+        return self.sensor.distance()/2
