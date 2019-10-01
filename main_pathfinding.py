@@ -12,6 +12,8 @@ import pilot, distance_sensor, color_sensor, robot_status, lcd_display, collisio
 
 
 pilote = pilot.Pilot()
+rSpeed = 50
+angleSpeed = 0
 pilote_cs = color_sensor.CSensor()
 distance_sensor = distance_sensor.DistanceSensor()
 collision_management = collision_management.CollisionManagement(distance_sensor)
@@ -21,8 +23,8 @@ while(1):
     vitesse = collision_management.collisionSpeed(vitesseMax)
     path_color = pilote_cs.color()
     if(path_color==Color.WHITE):
-        pilote.forwardTurn(vitesse, 350)
+        pilote.forwardTurn(vitesse, 50)
     elif(path_color==Color.BLUE):
         pilote.forwardRelative(vitesse)
     elif(path_color==Color.BLACK):
-        pilote.forwardTurn(vitesse, -350)
+        pilote.forwardTurn(vitesse, -70)
