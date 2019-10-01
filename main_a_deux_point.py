@@ -12,7 +12,8 @@ import pilot, distance_sensor, color_sensor, robot_status, lcd_display, log
 
 pilote_suiveur = pilot.Pilot()
 distance_suiveur = distance_sensor.DistanceSensor()
-robot_suiveur = robot_status.RobotStatus(color_suiveur.color(), distance_suiveur.distance())
+color_suiveur = color_sensor.CSensor()
+robot_suiveur = robot_status.RobotStatus(color_suiveur.color(), distance_suiveur.distance(), 0)
 log_suiveur = log.Log(robot_suiveur)
 
 #D = 5
