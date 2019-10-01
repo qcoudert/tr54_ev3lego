@@ -15,18 +15,14 @@ pilote = pilot.Pilot()
 rSpeed = 50
 angleSpeed = 0
 pilote_cs = color_sensor.CSensor()
-temoin = 0
 chemin = []
 
 
-while(temoin<2):
-    if(path_color==Color.GREEN):
-        temoin = temoin + 1
+while(1):
     path_color = pilote_cs.color()
     if(path_color==Color.WHITE):
         pilote.forwardTurn(80, 50)
     elif(path_color==Color.BLUE):
         pilote.forwardRelative(90)
-        chemin.append(2)
     elif(path_color==Color.BLACK):
         pilote.forwardTurn(80, -70)
