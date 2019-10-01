@@ -12,6 +12,8 @@ import pilot, distance_sensor, color_sensor, robot_status, lcd_display
 import time
 
 pilote = pilot.Pilot()
+rSpeed = 50
+angleSpeed = 0
 pilote_cs = color_sensor.CSensor()
 temoin = 0
 chemin = []
@@ -22,14 +24,9 @@ while(temoin<2):
         temoin = temoin + 1
     path_color = pilote_cs.color()
     if(path_color==Color.WHITE):
-        pilote.forwardTurn(90, 350)
-        chemin.append(1)
+        pilote.forwardTurn(80, 50)
     elif(path_color==Color.BLUE):
         pilote.forwardRelative(90)
         chemin.append(2)
     elif(path_color==Color.BLACK):
-        pilote.forwardTurn(90, 350)
-        chemin.append(3)
-
-for i in chemin:
-    
+        pilote.forwardTurn(80, -70)
