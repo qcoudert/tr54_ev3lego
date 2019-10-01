@@ -34,7 +34,7 @@ while(1) :
     vitesse = min(vitesse_freinage,vitesse_accel)
     #vitesse = min(   max(2.5*(dist-20),min(max(a*(dist-D),0),vitesse)),50   )
     pilote_suiveur.forwardRelative(vitesse)
-    robot_suiveur.updateStatus(color_suiveur.color(), distance_suiveur.distance())
+    robot_suiveur.updateStatus(color_suiveur.color(), distance_suiveur.distance(), vitesse)
     log_suiveur.writeLog()
     #print(dist)
     wait(Ts)
