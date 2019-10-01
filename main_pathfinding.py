@@ -19,8 +19,8 @@ pilote_cs = color_sensor.CSensor()
 while(1):
     path_color = pilote_cs.color()
     if(path_color==Color.WHITE):
-        pilote.forwardTurn(80, 50)
+        pilote.forwardTurn(80, 100)
     elif(path_color==Color.BLUE):
         pilote.forwardRelative(90)
     elif(path_color==Color.BLACK):
-        pilote.forwardTurn(80, -70)
+        pilote.forwardTurn(80, -100)
