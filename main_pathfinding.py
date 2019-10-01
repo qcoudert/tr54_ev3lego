@@ -23,16 +23,8 @@ while(1):
     vitesse = collision_management.collisionSpeed(vitesseMax)
     path_color = pilote_cs.color()
     if(path_color==Color.WHITE):
-<<<<<<< HEAD
-        pilote.forwardTurn(80, 100)
-=======
-        pilote.forwardTurn(vitesse, 50)
->>>>>>> bed46ca8714ee815a9dfb688a377c3c3a65ed42a
+        pilote.forwardTurn(vitesse, 100)
     elif(path_color==Color.BLUE):
         pilote.forwardRelative(vitesse)
     elif(path_color==Color.BLACK):
-<<<<<<< HEAD
-        pilote.forwardTurn(80, -100)
-=======
-        pilote.forwardTurn(vitesse, -70)
->>>>>>> bed46ca8714ee815a9dfb688a377c3c3a65ed42a
+        pilote.forwardTurn(vitesse, -100)
