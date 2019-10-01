@@ -12,8 +12,17 @@ class Pilot:
         self.left_motor.run(speed)
         self.right_motor.run(speed)
 
-    def forwardRelative(self, speedPercentage):
+    def forwardTurn(self, speedPercentage, angle):
         s = 850 * (speedPercentage/100)
+        if(angle>0):
+            self.left_motor.run(s-angle)
+            self.right_motor.run(s)
+        else:
+            self.left_motor.run(s)
+            self.right_motor.run(s-angle)
+        
+    def forwardRelative(self, speedPercentage):
+        s = 850 * (speedPercentage/100) #850 vitesse maximale du robot
         self.left_motor.run(s)
         self.right_motor.run(s)
 
