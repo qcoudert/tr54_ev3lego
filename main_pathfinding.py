@@ -8,17 +8,21 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color,
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 import sys, brick_SL
-import pilot, distance_sensor, color_sensor, robot_status, lcd_display
+import pilot, distance_sensor, color_sensor, robot_status, lcd_display, collision_management
 
 
 pilote = pilot.Pilot()
 pilote_cs = color_sensor.CSensor()
+distance_sensor = distance_sensor.DistanceSensor()
+collision_management = collision_management.CollisionManagement(distance_sensor)
 
 while(1):
+    vitesseMax = 70
+    vitesse = collision_management.collisionSpeed(vitesseMax)
     path_color = pilote_cs.color()
     if(path_color==Color.WHITE):
-        pilote.forwardTurn(70, 350)
+        pilote.forwardTurn(vitesse, 350)
     elif(path_color==Color.BLUE):
-        pilote.forwardRelative(90)
+        pilote.forwardRelative(vitesse)
     elif(path_color==Color.BLACK):
-        pilote.forwardTurn(70, -350)
+        pilote.forwardTurn(vitesse, -350)
