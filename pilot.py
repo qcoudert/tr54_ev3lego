@@ -14,8 +14,8 @@ class Pilot:
 
     def forwardTurn(self, speedPercentage, angle):
         s = 850 * (speedPercentage/100)
-        if(angle>0):
-            self.left_motor.run(s-angle)
+        if(angle<0):
+            self.left_motor.run(s+angle)
             self.right_motor.run(s)
         else:
             self.left_motor.run(s)
