@@ -6,7 +6,7 @@ class Pilot:
 
     def __init__(self):
         self.left_motor = Motor(Port.B)
-        self.right_motor = Motor(Port.D)
+        self.right_motor = Motor(Port.C)
 
     def forward(self, speed):
         self.left_motor.run(speed)
