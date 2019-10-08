@@ -19,7 +19,7 @@ distance_sensor = distance_sensor.DistanceSensor()
 collision_management = collision_management.CollisionManagement(distance_sensor)
 
 while(1):
-    vitesseMax = 70
+    vitesseMax = 80
     vitesse = collision_management.collisionSpeed(vitesseMax)
     path_color = pilote_cs.color()
     if(path_color==Color.WHITE):

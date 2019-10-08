@@ -9,7 +9,7 @@ class Pilot:
         self.speed = 0
         self.angleSpeed = 0
         self.left_motor = Motor(Port.B)
-        self.right_motor = Motor(Port.C)
+        self.right_motor = Motor(Port.D)
 
     def forward(self, speed):
         self.speed = speed
