@@ -40,6 +40,15 @@ class Pilot:
         self.left_motor.run_target(aSpeed, angle, Stop.BRAKE, False)
         self.right_motor.run_target(aSpeed, -angle, Stop.BRAKE, True)
 
+    def rotateR(self, speed):
+        s = 850 * (speed/100)
+        self.right_motor.run(s)
+
+    def rotateL(self, speed):
+        s = 850 * (speed/100)
+        self.left_motor.run(s)
+
+    
     def stop(self):
         self.left_motor.stop()
         self.right_motor.stop()
