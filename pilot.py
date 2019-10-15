@@ -20,15 +20,30 @@ class Pilot:
     def forwardTurn(self, speedPercentage, angle):
         s = 850 * (speedPercentage/100)
         if(angle<0):
+            if(self.angleSpeed > 0):
+                self.angleSpeed = 0
             if(-self.angleSpeed<MAX_ANGLE_SPEED):
                 self.angleSpeed = self.angleSpeed + angle
             self.left_motor.run(s+self.angleSpeed)
             self.right_motor.run(s)
         elif(angle>0):
+            if(self.angleSpeed < 0):
+                self.angleSpeed = 0
             if(self.angleSpeed<MAX_ANGLE_SPEED):
                 self.angleSpeed = self.angleSpeed + angle
             self.left_motor.run(s)
             self.right_motor.run(s-self.angleSpeed)
+
+    def forwardTurn2(self, speedPercentage, angle):
+        # angle -100 to 100
+        speed = 850 * (speedPercentage/100)
+        relativeAngle = (speed * angle) / 100
+        if(angle<0):
+            self.left_motor.run(speed+2*relativeAngle)
+            self.right_motor.run(speed)
+        elif(angle>0):
+            self.left_motor.run(speed)
+            self.right_motor.run(speed-2*relativeAngle)
         
     def forwardRelative(self, speedPercentage):
         s = 850 * (speedPercentage/100) #850 vitesse maximale du robot
