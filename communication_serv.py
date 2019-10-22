@@ -11,7 +11,7 @@ class Server(Thread):
 
         self.ip = ip                                                        #IP of the server
         self.broadcastAdd = self.getBroadcastAdd()                          #Broadcast Address the server will be using
-        print(str(self.broadcastAdd))
+        
         self.toSendMutex = True                                             #Mutex used to access the 'toSend' stack pile
         self.toSend = ["EOS"]                                               #Stack pile stocking the messages to send
 
