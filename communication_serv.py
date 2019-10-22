@@ -1,16 +1,20 @@
+#!/usr/bin/env python3
+
 import socket
-from pybricks.tools import print
+from pybricks.tools import print, wait
 from threading import Thread
+import time
 class Server(Thread):
 
-    def __init__(self):
+    def __init__(self, ip):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
-
-        self.ip = self.sock.getsockname()[0]                                #IP of the server
+ 
+        self.ip = ip
+        # self.ip = self.sock.getsockname()[0]                              #IP of the server
         self.broadcastAdd = self.getBroadcastAdd                            #Broadcast Address the server will be using
         
-        self.toSendMutex = True                                            #Mutex used to access the 'toSend' stack pile
+        self.toSendMutex = True                                             #Mutex used to access the 'toSend' stack pile
         self.toSend = ["EOS"]                                               #Stack pile stocking the messages to send
 
         self.receivedMutex = True                                           #Mutex used to access the 'receivedMsg' stack pile
@@ -20,30 +24,31 @@ class Server(Thread):
         if(self.toSendMutex):
             self.toSendMutex = False
             try:
-                self.sock.sendto(toSend.pop(), (self.broadcastAdd, 37020))
+                self.sock.sendto(self.toSend.pop(), (self.broadcastAdd(), 37020))
             except OSError as err:
                 print("OS error: {0}".format(err))
                 self.sock.close()
             self.toSendMutex = True
+            print("msg sent")
 
     def getBroadcastAdd(self):
         i = j = len(self.ip)
-        while(self.ip[i-1]!='.')
+        while(self.ip[i-1]!='.'):
             i = i-1
         bAdd = self.ip[:(i-j)]
         bAdd = bAdd + '255'
         return bAdd
 
-    def peekStack(stack):
+    def peekStack(self, stack):
         i = len(stack)
-        if(stack[i-1]!="EOS"):
-            return False
-        else:
-            return True
+        return (stack[i-1]!="EOS")
+
     
     def run(self):
         while True:
-            if(peekStack(self.toSend)):
-                sendMsg()
+            if(self.peekStack(self.toSend)):
+                self.sendMsg()
+                print("msg sent")
+            
             
 
