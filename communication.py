@@ -1,5 +1,5 @@
 import socket
-from threading import Thread
+from threading import Thread, Lock
 
 class Communication(Thread):
 
