@@ -9,10 +9,10 @@ class Server(Thread):
     def __init__(self, ip):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
- 
-        self.ip = ip
-        # self.ip = self.sock.getsockname()[0]                              #IP of the server
-        self.broadcastAdd = self.getBroadcastAdd                            #Broadcast Address the server will be using
+        self.sock.bind(("", 37020))
+
+        self.ip = ip                                                        #IP of the server
+        self.broadcastAdd = self.getBroadcastAdd()                          #Broadcast Address the server will be using
         
         self.toSendMutex = True                                             #Mutex used to access the 'toSend' stack pile
         self.toSend = ["EOS"]                                               #Stack pile stocking the messages to send
