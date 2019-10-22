@@ -1,5 +1,5 @@
 import socket
-from threading import Thread
+from threading import Thread, Lock
 
 class Communication(Thread):
 
@@ -19,5 +19,3 @@ class Communication(Thread):
         while True: 
             data, addr = self.sock.recvfrom(1024)
             self.rcvData.append(data)
-
-
