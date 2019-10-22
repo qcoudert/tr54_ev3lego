@@ -13,11 +13,16 @@ import os
 
 # Write your program here
 brick.sound.beep(200, 100)
-print(sys.version)
+print(sys.version_info)
 i = 0
-serv = communication_serv.Server()
+serv = communication_serv.Server("192.168.43.27")
 while(1):
-    serv.sendMsg("Slt"+str(i))
+    if(serv.toSendMutex):
+        serv.toSendMutex = False
+        serv.toSend.append("Slt"+str(i))
+        serv.toSendMutex = True
+
+    serv.sendMsg()
     brick.display.text("Message envoye")
     wait(1000)
     i=i+1
