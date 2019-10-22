@@ -69,7 +69,7 @@ class Pilot:
         self.speed = round(850 * (speedPercentage/100))
         self.turnItRight = 0
         self.turnItLeft = self.turnItRight + angleAcc
-        self.angleSpeed = min(MAX_ANGLE_SPEED, round(((1/math.exp(self.turnItRight*(-2)))*MAX_ANGLE_SPEED))
+        self.angleSpeed = min(MAX_ANGLE_SPEED, round(((1/math.exp(self.turnItRight*(-2)))*MAX_ANGLE_SPEED)))
         self.left_motor.run(self.speed)
         self.right_motor.run(self.speed-self.angleSpeed)
         return self
@@ -87,7 +87,7 @@ class Pilot:
         self.speed = round(850 * (speedPercentage/100))
         self.turnItLeft = 0
         self.turnItRight = self.turnItRight + angleAcc
-        self.angleSpeed = min(MAX_ANGLE_SPEED, round(((1/math.exp(self.turnItRight*(-2)))*MAX_ANGLE_SPEED))
+        self.angleSpeed = min(MAX_ANGLE_SPEED, round(((1/math.exp(self.turnItRight*(-2)))*MAX_ANGLE_SPEED)))
         self.left_motor.run(self.speed)
         self.right_motor.run(self.speed-self.angleSpeed)
         return self

@@ -3,14 +3,14 @@ from pybricks.tools import print
 from threading import Thread
 class Server(Thread):
 
-    def __init__(self):
+    def __init__(self, ip):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
 
-        self.ip = self.sock.getsockname()[0]                                #IP of the server
-        self.broadcastAdd = self.getBroadcastAdd                            #Broadcast Address the server will be using
-        
-        self.toSendMutex = True                                            #Mutex used to access the 'toSend' stack pile
+        self.ip = ip                                                        #IP of the server
+        self.broadcastAdd = self.getBroadcastAdd()                          #Broadcast Address the server will be using
+        print(str(self.broadcastAdd))
+        self.toSendMutex = True                                             #Mutex used to access the 'toSend' stack pile
         self.toSend = ["EOS"]                                               #Stack pile stocking the messages to send
 
         self.receivedMutex = True                                           #Mutex used to access the 'receivedMsg' stack pile
@@ -20,7 +20,7 @@ class Server(Thread):
         if(self.toSendMutex):
             self.toSendMutex = False
             try:
-                self.sock.sendto(toSend.pop(), (self.broadcastAdd, 37020))
+                self.sock.sendto(self.toSend.pop(), (self.broadcastAdd, 37020))
             except OSError as err:
                 print("OS error: {0}".format(err))
                 self.sock.close()
@@ -28,11 +28,11 @@ class Server(Thread):
 
     def getBroadcastAdd(self):
         i = j = len(self.ip)
-        while(self.ip[i-1]!='.')
+        while(self.ip[i-1]!='.'):
             i = i-1
         bAdd = self.ip[:(i-j)]
         bAdd = bAdd + '255'
-        return bAdd
+        return str(bAdd)
 
     def peekStack(stack):
         i = len(stack)
