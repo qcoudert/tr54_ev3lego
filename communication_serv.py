@@ -28,8 +28,13 @@ class Server(Thread):
             except OSError as err:
                 print("OS error: {0}".format(err))
                 self.sock.close()
+            print("Message sent")
             self.toSendMutex = True
             print("msg sent")
+
+    def recvMsg(self):
+        data, addr = self.sock.recvfrom(1024)
+        self.receivedMsg.append(data)
 
     def getBroadcastAdd(self):
         i = j = len(self.ip)
@@ -37,7 +42,7 @@ class Server(Thread):
             i = i-1
         bAdd = self.ip[:(i-j)]
         bAdd = bAdd + '255'
-        return bAdd
+        return str(bAdd)
 
     def peekStack(self, stack):
         i = len(stack)
@@ -48,7 +53,9 @@ class Server(Thread):
         while True:
             if(self.peekStack(self.toSend)):
                 self.sendMsg()
-                print("msg sent")
-            
-            
+
+            if(self.receivedMutex):
+                #self.receivedMutex = False
+                self.recvMsg()
+                self.receivedMutex = True
 

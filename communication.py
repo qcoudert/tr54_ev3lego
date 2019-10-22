@@ -3,13 +3,14 @@ from threading import Thread, Lock
 
 class Communication(Thread):
 
-    def __init__(self):
+    def __init__(self, ip):
         Thread.__init__(self)
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         self.sock.bind(("", 37020))
 
+        self.ip = ip
         self.rcvData = ["EOS"]
 
     def listen(self):
