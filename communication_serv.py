@@ -10,7 +10,7 @@ class Server(Thread):
         self.ip = self.sock.getsockname()[0]                                #IP of the server
         self.broadcastAdd = self.getBroadcastAdd                            #Broadcast Address the server will be using
         
-        self.toSendMutex = True                                            #Mutex used to access the 'toSend' stack pile
+        self.toSendMutex = True                                             #Mutex used to access the 'toSend' stack pile
         self.toSend = ["EOS"]                                               #Stack pile stocking the messages to send
 
         self.receivedMutex = True                                           #Mutex used to access the 'receivedMsg' stack pile
@@ -28,7 +28,7 @@ class Server(Thread):
 
     def getBroadcastAdd(self):
         i = j = len(self.ip)
-        while(self.ip[i-1]!='.')
+        while(self.ip[i-1]!='.'):
             i = i-1
         bAdd = self.ip[:(i-j)]
         bAdd = bAdd + '255'
