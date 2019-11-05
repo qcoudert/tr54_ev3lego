@@ -38,6 +38,14 @@ class Server(Thread):
             self.toSend.append(msg)
             self.toSendMutex = True
 
+    def getMsg(self):
+        data = None
+        if(self.receivedMutex):
+            self.receivedMutex = False
+            if(self.peekStack(self.receivedMsg)):
+                data = self.receivedMsg.pop()
+            self.receivedMutex = True
+        return data
 
     def recvMsg(self):
         data, addr = self.sock.recvfrom(1024)
