@@ -32,6 +32,13 @@ class Server(Thread):
             self.toSendMutex = True
             print("msg sent")
 
+    def queueMsg(self, msg):
+        if(self.toSendMutex):
+            self.toSendMutex = False
+            self.toSend.append(msg)
+            self.toSendMutex = True
+
+
     def recvMsg(self):
         data, addr = self.sock.recvfrom(1024)
         self.receivedMsg.append(data)
