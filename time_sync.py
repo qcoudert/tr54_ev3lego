@@ -19,6 +19,8 @@ class timeSync:
         self.delta_time = master_time - time.time()
 
     def getTimeSync():
+        """Calculate and return the time synchrinized which the mode pass in initialisation.
+        """
         if self.mode == "CENTRALISED" :
             return time.time()+self.delta_time
         else :
