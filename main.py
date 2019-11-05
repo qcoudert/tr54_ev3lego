@@ -15,7 +15,7 @@ import os
 brick.sound.beep(200, 100)
 print(sys.version_info)
 i = 0
-serv = communication_serv.Server("192.168.43.27")
+serv = communication_serv.Server("192.168.43.238")
 serv.start()
 
 

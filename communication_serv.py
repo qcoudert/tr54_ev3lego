@@ -4,7 +4,7 @@ import socket
 from pybricks.tools import print, wait
 from threading import Thread
 import time
-import string
+import struct
 class Server(Thread):
 
     def __init__(self, ip):
@@ -24,15 +24,13 @@ class Server(Thread):
     def sendMsg(self):
         if(self.toSendMutex):
             #self.toSendMutex = False
-            if(self.peekStack(self.toSend)):
-                try:
-                    self.sock.sendto(self.toSend.pop().encode("utf-8"), (self.broadcastAdd, 37020))
-                except OSError as err:
-                    print("OS error: {0}".format(err))
-                    self.sock.close()
-                print("Message sent")
-                self.toSendMutex = True
-                print("msg sent")
+            try:
+                self.sock.sendto(self.toSend.pop().encode('utf-8'), (self.broadcastAdd, 37020))
+            except OSError as err:
+                print("OS error: {0}".format(err))
+                self.sock.close()
+            print("Message sent")
+            self.toSendMutex = True
 
     def queueMsg(self, msg):
         if(self.toSendMutex):
@@ -51,7 +49,13 @@ class Server(Thread):
 
     def recvMsg(self):
         data, addr = self.sock.recvfrom(1024)
-        self.receivedMsg.append(data.decode("utf-8"))
+        if(addr[0]!=self.ip):
+            self.receivedMsg.append(data.decode('utf-8'))
+        else:
+            data = None
+        
+        if(data!=None):
+            print("Message received")
 
     def getBroadcastAdd(self):
         i = j = len(self.ip)
@@ -59,12 +63,15 @@ class Server(Thread):
             i = i-1
         bAdd = self.ip[:(i-j)]
         bAdd = bAdd + '255'
-        return str(bAdd)
+        return bAdd
 
     def peekStack(self, stack):
         i = len(stack)
         return (stack[i-1]!="EOS")
 
-
+    
     def run(self):
-        self.recvMsg()
+        while True:
+            self.recvMsg()
+
+ 
