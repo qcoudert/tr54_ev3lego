@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
+
 import socket
-from pybricks.tools import print
+from pybricks.tools import print, wait
 from threading import Thread
 import time
 class Server(Thread):
@@ -22,12 +24,28 @@ class Server(Thread):
         if(self.toSendMutex):
             self.toSendMutex = False
             try:
-                self.sock.sendto(self.toSend.pop(), (self.broadcastAdd, 37020))
+                self.sock.sendto(self.toSend.pop(), (self.broadcastAdd(), 37020))
             except OSError as err:
                 print("OS error: {0}".format(err))
                 self.sock.close()
             print("Message sent")
             self.toSendMutex = True
+            print("msg sent")
+
+    def queueMsg(self, msg):
+        if(self.toSendMutex):
+            self.toSendMutex = False
+            self.toSend.append(msg)
+            self.toSendMutex = True
+
+    def getMsg(self):
+        data = None
+        if(self.receivedMutex):
+            self.receivedMutex = False
+            if(self.peekStack(self.receivedMsg)):
+                data = self.receivedMsg.pop()
+            self.receivedMutex = True
+        return data
 
     def recvMsg(self):
         data, addr = self.sock.recvfrom(1024)
@@ -43,10 +61,8 @@ class Server(Thread):
 
     def peekStack(self, stack):
         i = len(stack)
-        if(stack[i-1]!="EOS"):
-            return True
-        else:
-            return False
+        return (stack[i-1]!="EOS")
+
     
     def run(self):
         while True:
