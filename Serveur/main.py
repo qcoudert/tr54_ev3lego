@@ -1,4 +1,4 @@
-""" from communication import Server
+from communication import Server
 import time
 
 server = Server()
@@ -7,22 +7,11 @@ print(server.ip)
 print(server.broadcastAdd)
 
 i = 0
-while(i < 10):
+while(i < 100):
     print("Iteration " + str(i))
-    server.appendMsg("Je suis si seul :'(")
+    server.appendMsg("Yo")
     msg = server.readMsg()
     if(msg!=None):
         print(msg)
     time.sleep(1)
-    i = i + 1 """
-
-import struct
-
-data = bytes()
-data += struct.pack('lh', 1234, 1)
-
-print(data[0:4])
-
-res = struct.unpack('l', data[0:4])
-
-print(res)
+    i = i + 1

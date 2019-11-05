@@ -4,6 +4,7 @@ import socket
 from pybricks.tools import print, wait
 from threading import Thread
 import time
+import struct
 class Server(Thread):
 
     def __init__(self, ip):
@@ -22,26 +23,25 @@ class Server(Thread):
 
     def sendMsg(self):
         if(self.toSendMutex):
-            self.toSendMutex = False
+            #self.toSendMutex = False
             try:
-                self.sock.sendto(self.toSend.pop(), (self.broadcastAdd(), 37020))
+                self.sock.sendto(self.toSend.pop().encode('utf-8'), (self.broadcastAdd, 37020))
             except OSError as err:
                 print("OS error: {0}".format(err))
                 self.sock.close()
             print("Message sent")
             self.toSendMutex = True
-            print("msg sent")
 
     def queueMsg(self, msg):
         if(self.toSendMutex):
-            self.toSendMutex = False
+            #self.toSendMutex = False
             self.toSend.append(msg)
             self.toSendMutex = True
 
     def getMsg(self):
         data = None
         if(self.receivedMutex):
-            self.receivedMutex = False
+            #self.receivedMutex = False
             if(self.peekStack(self.receivedMsg)):
                 data = self.receivedMsg.pop()
             self.receivedMutex = True
@@ -49,7 +49,13 @@ class Server(Thread):
 
     def recvMsg(self):
         data, addr = self.sock.recvfrom(1024)
-        self.receivedMsg.append(data)
+        if(addr[0]!=self.ip):
+            self.receivedMsg.append(data.decode('utf-8'))
+        else:
+            data = None
+        
+        if(data!=None):
+            print("Message received")
 
     def getBroadcastAdd(self):
         i = j = len(self.ip)
@@ -57,7 +63,7 @@ class Server(Thread):
             i = i-1
         bAdd = self.ip[:(i-j)]
         bAdd = bAdd + '255'
-        return str(bAdd)
+        return bAdd
 
     def peekStack(self, stack):
         i = len(stack)
@@ -66,11 +72,5 @@ class Server(Thread):
     
     def run(self):
         while True:
-            if(self.peekStack(self.toSend)):
-                self.sendMsg()
-
-            if(self.receivedMutex):
-                #self.receivedMutex = False
-                self.recvMsg()
-                self.receivedMutex = True
+            self.recvMsg()
 
