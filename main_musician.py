@@ -23,7 +23,7 @@ com_network = communication_serv.Server("192.168.43.178")
 
 #Note, NoteFactory, Track, TrackPlayer, TimeUtils, TrackReader
 music_reader = music.TrackReader()
-music_track = music_reader.read('musics/score02/track01.txt')
+music_track = music_reader.read('musics/score02/track03.txt')
 music_player = music.TrackPlayer(music_track, 120)
 
 
@@ -33,6 +33,3 @@ com_network.start()
 
 while(1):
     music_player.play(1,time.time())
-    if (len(com_network.listen()) > index+1):
-        index = index + 1
-        brick.display.text(str(com_network.listen()[index]))
