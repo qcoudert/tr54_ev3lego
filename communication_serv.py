@@ -4,6 +4,7 @@ import socket
 from pybricks.tools import print, wait
 from threading import Thread
 import time
+import string
 class Server(Thread):
 
     def __init__(self, ip):
@@ -23,14 +24,15 @@ class Server(Thread):
     def sendMsg(self):
         if(self.toSendMutex):
             self.toSendMutex = False
-            try:
-                self.sock.sendto(self.toSend.pop(), (self.broadcastAdd(), 37020))
-            except OSError as err:
-                print("OS error: {0}".format(err))
-                self.sock.close()
-            print("Message sent")
-            self.toSendMutex = True
-            print("msg sent")
+            if(self.peekStack(self.toSend)):
+                try:
+                    self.sock.sendto(self.toSend.pop().encode("utf-8"), (self.broadcastAdd, 37020))
+                except OSError as err:
+                    print("OS error: {0}".format(err))
+                    self.sock.close()
+                print("Message sent")
+                self.toSendMutex = True
+                print("msg sent")
 
     def queueMsg(self, msg):
         if(self.toSendMutex):
@@ -41,7 +43,7 @@ class Server(Thread):
 
     def recvMsg(self):
         data, addr = self.sock.recvfrom(1024)
-        self.receivedMsg.append(data)
+        self.receivedMsg.append(data.decode("utf-8"))
 
     def getBroadcastAdd(self):
         i = j = len(self.ip)
@@ -55,14 +57,14 @@ class Server(Thread):
         i = len(stack)
         return (stack[i-1]!="EOS")
 
-    
+
+
     def run(self):
         while True:
             if(self.peekStack(self.toSend)):
                 self.sendMsg()
-
             if(self.receivedMutex):
-                #self.receivedMutex = False
-                self.recvMsg()
+                self.receivedMutex = False
+                if(self.peekStack(self.receivedMsg)):
+                    brick.display.text(self.recvMsg())
                 self.receivedMutex = True
-
