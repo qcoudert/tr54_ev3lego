@@ -23,7 +23,7 @@ class Server(Thread):
 
     def sendMsg(self):
         if(self.toSendMutex):
-            self.toSendMutex = False
+            #self.toSendMutex = False
             if(self.peekStack(self.toSend)):
                 try:
                     self.sock.sendto(self.toSend.pop().encode("utf-8"), (self.broadcastAdd, 37020))
@@ -36,14 +36,14 @@ class Server(Thread):
 
     def queueMsg(self, msg):
         if(self.toSendMutex):
-            self.toSendMutex = False
+            #self.toSendMutex = False
             self.toSend.append(msg)
             self.toSendMutex = True
 
     def getMsg(self):
         data = None
         if(self.receivedMutex):
-            self.receivedMutex = False
+            #self.receivedMutex = False
             if(self.peekStack(self.receivedMsg)):
                 data = self.receivedMsg.pop()
             self.receivedMutex = True
@@ -66,13 +66,5 @@ class Server(Thread):
         return (stack[i-1]!="EOS")
 
 
-
     def run(self):
-        while True:
-            if(self.peekStack(self.toSend)):
-                self.sendMsg()
-            if(self.receivedMutex):
-                self.receivedMutex = False
-                if(self.peekStack(self.receivedMsg)):
-                    brick.display.text(self.recvMsg())
-                self.receivedMutex = True
+        self.recvMsg()
