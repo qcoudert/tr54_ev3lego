@@ -1,15 +1,17 @@
 import socket
 from pybricks.tools import print
 from threading import Thread
+import time
 class Server(Thread):
 
     def __init__(self, ip):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
+        self.sock.bind(("", 37020))
 
         self.ip = ip                                                        #IP of the server
         self.broadcastAdd = self.getBroadcastAdd()                          #Broadcast Address the server will be using
-        print(str(self.broadcastAdd))
+        
         self.toSendMutex = True                                             #Mutex used to access the 'toSend' stack pile
         self.toSend = ["EOS"]                                               #Stack pile stocking the messages to send
 
@@ -24,7 +26,12 @@ class Server(Thread):
             except OSError as err:
                 print("OS error: {0}".format(err))
                 self.sock.close()
+            print("Message sent")
             self.toSendMutex = True
+
+    def recvMsg(self):
+        data, addr = self.sock.recvfrom(1024)
+        self.receivedMsg.append(data)
 
     def getBroadcastAdd(self):
         i = j = len(self.ip)
@@ -34,16 +41,20 @@ class Server(Thread):
         bAdd = bAdd + '255'
         return str(bAdd)
 
-    def peekStack(stack):
+    def peekStack(self, stack):
         i = len(stack)
         if(stack[i-1]!="EOS"):
-            return False
-        else:
             return True
+        else:
+            return False
     
     def run(self):
         while True:
-            if(peekStack(self.toSend)):
-                sendMsg()
-            
+            if(self.peekStack(self.toSend)):
+                self.sendMsg()
+
+            if(self.receivedMutex):
+                #self.receivedMutex = False
+                self.recvMsg()
+                self.receivedMutex = True
 
