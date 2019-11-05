@@ -33,7 +33,8 @@ index = 0
 
 com_network.start()
 
-music_player.start()
 
+isStart = False
 while(1):
-    test = 1
+    if (isStart == False and com_network.getMsg() == "start"):
+        music_player.start()
