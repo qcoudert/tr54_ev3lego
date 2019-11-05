@@ -8,7 +8,7 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color,
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 import sys, brick_SL, time
-import pilot, distance_sensor, color_sensor, robot_status, lcd_display, collision_management, log, communication_serv, music
+import pilot, distance_sensor, color_sensor, robot_status, lcd_display, collision_management, log, communication_serv, music, time_sync
 
 
 pilote = pilot.Pilot()
@@ -17,19 +17,23 @@ distance_sensor = distance_sensor.DistanceSensor()
 collision_management = collision_management.CollisionManagement(distance_sensor)
 status = robot_status.RobotStatus(pilote_cs.color(), distance_sensor.distance(), 0)
 journal = log.Log(status)
+m_time_sync = time_sync.timeSync("CENTRALISED", 3)
 
 com_network = communication_serv.Server("192.168.43.178")
 
 
 #Note, NoteFactory, Track, TrackPlayer, TimeUtils, TrackReader
 music_reader = music.TrackReader()
-music_track = music_reader.read('musics/score02/track03.txt')
-music_player = music.TrackPlayer(music_track, 120)
+music_track = music_reader.read('musics/score01/violin1.txt') 
+#'musics/score02/track03.txt')
+music_player = music.TrackPlayer(music_track, 90, m_time_sync)
 
 
 index = 0
 
 com_network.start()
 
+music_player.start()
+
 while(1):
-    music_player.play(1,time.time())
+    test = 1

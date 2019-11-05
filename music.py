@@ -1,6 +1,7 @@
 
 from pybricks import ev3brick as brick
 from pybricks.tools import print, wait, StopWatch
+from threading import Thread
 
 class Note:
 
@@ -57,15 +58,23 @@ class Track:
     def __init__(self, notes):
         self.notes = notes
 
-class TrackPlayer:
+class TrackPlayer(Thread):
 
-    def __init__(self, track, bmp):
+    def __init__(self, track, bmp, m_time_sync):
+        Thread.__init__(self)
         self.time = 0
         self.noteDelay = 100
         self.lastStartTime = 0
         self.position = 0
         self.track = track
         self.bmp = bmp
+        self.m_time_sync = m_time_sync
+
+    def run(self):
+        start_time = self.m_time_sync.getTimeSync()
+        while(1):
+            play(1,(self.m_time_sync.getTimeSync() - start_time)*1000)
+
 
     def play(self, volume, masterTime):
         if(not self.isOver() and masterTime >= self.time):
