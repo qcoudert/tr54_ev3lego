@@ -15,19 +15,18 @@ import os
 brick.sound.beep(200, 100)
 print(sys.version_info)
 i = 0
-serv = communication_serv.Server("192.168.43.27")
+serv = communication_serv.Server("192.168.43.238")
 serv.start()
+isSending = False
+rep = 0
 while(1):
-    if(serv.receivedMutex):
-        serv.receivedMutex = False
-        if(serv.peekStack(serv.receivedMsg)):
-            data = serv.receivedMsg.pop()
-            brick.display.text(data)
-        serv.receivedMutex = True
+    data = serv.getMsg()
+    brick.display.text(data)
+    #print(str(serv.receivedMutex))
+    #print(str(serv.toSendMutex))
+    iserv.queueMsg("test")
+    serv.sendMsg()
 
-    
-    print(str(serv.receivedMutex))
-    print(str(serv.toSendMutex))
-    wait(500)
+    wait(1000)
 
 
