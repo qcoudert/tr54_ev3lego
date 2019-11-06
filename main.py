@@ -17,16 +17,16 @@ print(sys.version_info)
 i = 0
 serv = communication_serv.Server("192.168.43.238")
 serv.start()
-isSending = False
+isSending = True
 rep = 0
 while(1):
     data = serv.getMsg()
     brick.display.text(data)
     #print(str(serv.receivedMutex))
     #print(str(serv.toSendMutex))
-    iserv.queueMsg("test")
+    serv.queueMsg("start")
     serv.sendMsg()
 
-    wait(1000)
+    wait(100)
 
 
