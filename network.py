@@ -48,3 +48,5 @@ class MessageSender:
         except OSError as err:
             print("OS error: {0}".format(err))
             self.sock.close()
+
+#TODO: Create a Message class that pack and unpack information into bytes
