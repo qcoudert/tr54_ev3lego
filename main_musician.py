@@ -10,10 +10,9 @@ from pybricks.robotics import DriveBase
 import sys, brick_SL, time
 import pilot, distance_sensor, color_sensor, robot_status, lcd_display, collision_management, log, music, time_sync, network
 
-
 m_time_sync = time_sync.timeSync("CENTRALISED", 3)
 
-com_network = network.NetworkListener("192.168.43.28")
+com_network = network.NetworkListener("192.168.43.87")
 
 
 #Note, NoteFactory, Track, TrackPlayer, TimeUtils, TrackReader

@@ -60,7 +60,7 @@ class Server(Thread):
             if(self.peekStack(self.toSend)):
                 self.__sendMsg()
 
-            self.__recvMsg()
+            #self.__recvMsg()
     
     def appendMsg(self, msg):
         with self.toSendMutex:

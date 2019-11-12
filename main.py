@@ -14,15 +14,15 @@ import os
 # Write your program here
 brick.sound.beep(200, 100)
 print(sys.version_info)
-serv_listener = network.NetworkListener("192.168.43.27")
-serv_sender = network.MessageSender("192.168.43.27", serv_listener.sock)
+serv_listener = network.NetworkListener("192.168.43.87")
+serv_sender = network.MessageSender("192.168.43.87", serv_listener.sock)
 serv_listener.start()
 i=0
 while(1):
     i+=1
-    serv_sender.sendMessage("poulet" + str(i))
+    serv_sender.sendMessage("michou" + str(i))
     if(serv_listener.mailbox):
         brick.display.text(serv_listener.mailbox.pop(0))
-    wait(1000)
+    wait(100)
 
 
