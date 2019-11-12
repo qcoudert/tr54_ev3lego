@@ -19,7 +19,10 @@ class NetworkListener(Thread):
 
     def __listen(self):
         """Listen any message that comes through port 37020"""
-        data, addr = self.sock.recvfrom(1024)
+        try:
+            data, addr = self.sock.recvfrom(1024)
+        except OSError as err:
+            print("OSError: {0}".format(err))
         #TODO: Create filter so that addr is different from self.ip (addr is a bytes array so HF :^) )
         if(data!=None):
             self.mailbox.append(data.decode('utf-8')) #TODO: use struct to unpack the message in later versions
@@ -57,6 +60,5 @@ class MessageSender:
             
         except OSError as err:
             print("OS error: {0}".format(err))
-            self.sock.close()
 
 #TODO: Create a Message class that pack and unpack information into bytes
