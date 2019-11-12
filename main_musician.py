@@ -38,11 +38,11 @@ com_network.start()
 
 isStart = False
 while(1):
-    if (isStart == False and com_network.mailbox.pop(0) == "start"):
+    if (isStart == False and com_network.mailbox and com_network.mailbox.pop(0) == "start"):
         music_player.start()
         isStart = True
 
-    if (isStart):
+    if (isStart and com_network.mailbox):
         master_time = com_network.mailbox.pop(0)
         if(master_time != None):
             m_time_sync.masterTime(float(master_time))
