@@ -31,12 +31,17 @@ com_network.start()
 
 
 isStart = False
+bipped = False
 start_time = 0
 while(1):
-    if (isStart == False and com_network.mailbox and com_network.mailbox.pop(0) == "start"):
-        music_player.start()
-        start_time = time.time()
-        isStart = True
+    if (isStart == False and com_network.mailbox):
+        master_time = com_network.mailbox.pop()
+        if(master_time != None):
+            print(m_time_sync.getTimeSync())
+            m_time_sync.masterTime(float(master_time))
+            music_player.start()
+            start_time = m_time_sync.getTimeSync()
+            isStart = True
 
     if (isStart and com_network.mailbox):
         master_time = com_network.mailbox.pop()
@@ -44,7 +49,11 @@ while(1):
             print(m_time_sync.getTimeSync())
             m_time_sync.masterTime(float(master_time))
 
-    if(isStart and m_time_sync.getTimeSync() - start_time > 30):
-        brick.sound.beep(500,0.5,3)
+    if(isStart and bipped == False and m_time_sync.getTimeSync() - start_time > 40):
+        brick.sound.beep(500, 10, 3)
+        bipped = True
+
+    
+    
 
             
