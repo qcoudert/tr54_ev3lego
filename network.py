@@ -19,6 +19,7 @@ class NetworkListener(Thread):
 
     def __listen(self):
         """Listen any message that comes through port 37020"""
+        data = None
         try:
             data, addr = self.sock.recvfrom(1024)
         except OSError as err:
