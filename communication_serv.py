@@ -49,6 +49,7 @@ class Server(Thread):
 
     def recvMsg(self):
         data, addr = self.sock.recvfrom(1024)
+        print(addr)
         if(addr[0]!=self.ip):
             self.receivedMsg.append(data.decode('utf-8'))
         else:
@@ -74,3 +75,4 @@ class Server(Thread):
         while True:
             self.recvMsg()
 
+ 
