@@ -22,7 +22,7 @@ music_track = music_reader.read('musics/score01/violin1.txt')
 #music_track = music_reader.read('musics/score01/violin2.txt') 
 #music_track = music_reader.read('musics/score01/contrabass.txt') 
 #'musics/score02/track03.txt')
-music_player = music.TrackPlayer(music_track, 90, m_time_sync)
+music_player = music.TrackPlayer(music_track, 70, m_time_sync)
 
 
 index = 0
@@ -31,14 +31,20 @@ com_network.start()
 
 
 isStart = False
-i=0
+start_time = 0
 while(1):
     if (isStart == False and com_network.mailbox and com_network.mailbox.pop(0) == "start"):
         music_player.start()
+        start_time = time.time()
         isStart = True
 
     if (isStart and com_network.mailbox):
-        master_time = com_network.mailbox.pop(0)
+        master_time = com_network.mailbox.pop()
         if(master_time != None):
+            print(m_time_sync.getTimeSync())
             m_time_sync.masterTime(float(master_time))
+
+    if(isStart and m_time_sync.getTimeSync() - start_time > 30):
+        brick.sound.beep(500,0.5,3)
+
             
