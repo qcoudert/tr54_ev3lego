@@ -25,7 +25,8 @@ class NetworkListener(Thread):
             self.mailbox.append(data.decode('utf-8')) #TODO: use struct to unpack the message in later versions
 
     def run(self):
-        self.__listen()
+        while(1):
+            self.__listen()
 
 class MessageSender:
 
@@ -37,14 +38,25 @@ class MessageSender:
         socket should often use the same socket than the NetworkListener in this project
         """
 
-        self.sock = socket                                                  #Socket object used to broadcast messages
-        self.ip = ip                                                        #IP of the user
+        self.sock = socket  #Socket object used to broadcast messages
+        self.ip = ip   #IP of the user
+
+        toSend = []
+
+    def getBroadcastAdd(self):
+        i = j = len(self.ip)
+        while(self.ip[i-1]!='.'):
+            i = i-1
+        bAdd = self.ip[:(i-j)]
+        bAdd = bAdd + '255'
+        return bAdd
 
     def sendMessage(self, message):
         """Broadcast a string message with the provided socket"""
         #TODO: Change messages from strings to packed objects
         try:
-            self.sock.sendto(self.toSend.pop().encode('utf-8'), (self.broadcastAdd, 37020))
+            self.sock.sendto(message.encode('utf-8'), (self.getBroadcastAdd(), 37020))
+            
         except OSError as err:
             print("OS error: {0}".format(err))
             self.sock.close()

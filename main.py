@@ -8,25 +8,21 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color,
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 import sys, brick_SL
-import pilot, distance_sensor, color_sensor, robot_status, lcd_display, communication_serv
+import pilot, distance_sensor, color_sensor, robot_status, lcd_display, network
 import os
 
 # Write your program here
 brick.sound.beep(200, 100)
 print(sys.version_info)
-i = 0
-serv = communication_serv.Server("192.168.43.238")
-serv.start()
-isSending = True
-rep = 0
+serv_listener = network.NetworkListener("192.168.43.27")
+serv_sender = network.MessageSender("192.168.43.27", serv_listener.sock)
+serv_listener.start()
+i=0
 while(1):
-    data = serv.getMsg()
-    brick.display.text(data)
-    #print(str(serv.receivedMutex))
-    #print(str(serv.toSendMutex))
-    serv.queueMsg("start")
-    serv.sendMsg()
-
-    wait(100)
+    i+=1
+    serv_sender.sendMessage("msg" + str(i))
+    if(serv_listener.mailbox):
+        brick.display.text(serv_listener.mailbox.pop())
+    wait(500)
 
 
