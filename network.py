@@ -25,7 +25,8 @@ class NetworkListener(Thread):
             self.mailbox.append(data.decode('utf-8')) #TODO: use struct to unpack the message in later versions
 
     def run(self):
-        self.__listen()
+        while(True):
+            self.__listen()
 
 class MessageSender:
 
