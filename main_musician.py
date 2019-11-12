@@ -17,14 +17,11 @@ com_network = network.NetworkListener("192.168.43.87")
 
 #Note, NoteFactory, Track, TrackPlayer, TimeUtils, TrackReader
 music_reader = music.TrackReader()
-#music_track = music_reader.read('musics/score01/violin1.txt') 
+music_track = music_reader.read('musics/score01/violin1.txt') 
 #music_track = music_reader.read('musics/score01/violin2.txt') 
-music_track = music_reader.read('musics/score01/contrabass.txt') 
-#music_track = music_reader.read('musics/score01/violin1.txt') 
-music_track = music_reader.read('musics/score01/violin2.txt') 
 #music_track = music_reader.read('musics/score01/contrabass.txt') 
 #'musics/score02/track03.txt')
-music_player = music.TrackPlayer(music_track, 70, m_time_sync)
+music_player = music.TrackPlayer(music_track, 50, m_time_sync)
 
 
 index = 0
@@ -34,12 +31,11 @@ com_network.start()
 
 isStart = False
 bipped = False
-start_time = 0
+start_time = time.time()
 while(1):
     if (isStart == False and com_network.mailbox):
         master_time = com_network.mailbox.pop()
         if(master_time != None):
-            print(m_time_sync.getTimeSync())
             m_time_sync.masterTime(float(master_time))
             music_player.start()
             start_time = m_time_sync.getTimeSync()
@@ -52,7 +48,8 @@ while(1):
             m_time_sync.masterTime(float(master_time))
 
     if(isStart and bipped == False and m_time_sync.getTimeSync() - start_time > 40):
-        brick.sound.beep(500, 10, 3)
+        music_player.join()
+        brick.sound.beep(500, 1000, 3)
         bipped = True
 
     
