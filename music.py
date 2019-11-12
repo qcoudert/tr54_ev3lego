@@ -73,7 +73,7 @@ class TrackPlayer(Thread):
     def run(self):
         start_time = self.m_time_sync.getTimeSync()
         while(1):
-            self.play(3,(self.m_time_sync.getTimeSync() - start_time)*1000)
+            self.play(1,(self.m_time_sync.getTimeSync() - start_time)*1000)
 
 
     def play(self, volume, masterTime):
