@@ -41,8 +41,6 @@ class MessageSender:
         self.sock = socket  #Socket object used to broadcast messages
         self.ip = ip   #IP of the user
 
-        toSend = []
-
     def getBroadcastAdd(self):
         i = j = len(self.ip)
         while(self.ip[i-1]!='.'):
