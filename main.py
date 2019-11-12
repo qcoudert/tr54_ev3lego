@@ -21,10 +21,12 @@ serv.start()
 
 while(1):
     data = serv.getMsg() 
-    serv.queueMsg("poulet")
-    serv.sendMsg()
-
-    brick.display.text(data)
-    wait(500)
+    if (data == "PING"):
+        brick.display.text(data)
+        wait(500)
+        serv.queueMsg("PONG")
+        serv.sendMsg()
+    
+    
 
 
