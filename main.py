@@ -20,9 +20,9 @@ serv_listener.start()
 i=0
 while(1):
     i+=1
-    serv_sender.sendMessage("msg" + str(i))
+    serv_sender.sendMessage("poulet" + str(i))
     if(serv_listener.mailbox):
-        brick.display.text(serv_listener.mailbox.pop())
-    wait(500)
+        brick.display.text(serv_listener.mailbox.pop(0))
+    wait(1000)
 
 
