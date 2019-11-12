@@ -31,7 +31,7 @@ class timeSync:
                 for i in self.times:
                     sum = sum + i[1]
                 average = sum / (number_robot - 1)
-                self.delta_time = average - time.time()
+                self.delta_time = average
                 self.times = []
             return time.time() + self.delta_time
                     
