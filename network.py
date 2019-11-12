@@ -1,5 +1,7 @@
 from threading import Thread
 import socket
+from pybricks.tools import print
+import ipaddress
 
 class NetworkListener(Thread):
     """Class allowing users to listen any message that came through network
@@ -16,7 +18,7 @@ class NetworkListener(Thread):
         self.ip = ip                                                        #IP of the user
 
         self.mailbox = []                                                   #Array that contains any message listened
-
+        
     def __listen(self):
         """Listen any message that comes through port 37020"""
         try:
@@ -26,6 +28,9 @@ class NetworkListener(Thread):
         #TODO: Create filter so that addr is different from self.ip (addr is a bytes array so HF :^) )
         if(data!=None):
             self.mailbox.append(data.decode('utf-8')) #TODO: use struct to unpack the message in later versions
+            print(addr)
+            print(ipaddress.IPv4Address(addr[4:8]))
+            print("------------")
 
     def run(self):
         while(1):
