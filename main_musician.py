@@ -17,11 +17,8 @@ com_network = network.NetworkListener("192.168.43.87")
 
 #Note, NoteFactory, Track, TrackPlayer, TimeUtils, TrackReader
 music_reader = music.TrackReader()
-music_track = music_reader.read('musics/score01/violin1.txt') 
-#music_track = music_reader.read('musics/score01/violin2.txt') 
-<<<<<<< HEAD
-music_track = music_reader.read('musics/score01/contrabass.txt') 
-=======
+#music_track = music_reader.read('musics/score01/violin1.txt') 
+music_track = music_reader.read('musics/score01/violin2.txt') 
 #music_track = music_reader.read('musics/score01/contrabass.txt') 
 >>>>>>> 4e379067354932fd6d469f928467bde360667c14
 #'musics/score02/track03.txt')
