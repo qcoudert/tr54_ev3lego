@@ -12,17 +12,22 @@ import pilot, distance_sensor, color_sensor, robot_status, lcd_display, network
 import os
 
 # Write your program here
-brick.sound.beep(200, 100)
+"""brick.sound.beep(200, 100)
 print(sys.version_info)
 serv_listener = network.NetworkListener("192.168.43.87")
 serv_sender = network.MessageSender("192.168.43.87", serv_listener.sock)
 serv_listener.start()
 i=0
 while(1):
-    i+=1
-    serv_sender.sendMessage("michou" + str(i))
-    if(serv_listener.mailbox):
-        brick.display.text(serv_listener.mailbox.pop(0))
-    wait(100)
+    serv_sender.append("Hello")
+    serv_sender.append(123)
+    
+    print(serv_sender.sendMessage())
+    wait(100)"""
+
+msg = network.Message()
+msg.append("Hello")
+data = msg.encode()
+
 
 

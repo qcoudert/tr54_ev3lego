@@ -1,6 +1,8 @@
 import socket
 from threading import Thread, RLock
 import time
+from message import Message
+
 class Server(Thread):
 
     def __init__(self):
@@ -14,16 +16,16 @@ class Server(Thread):
         self.ip = socket.gethostbyname(socket.gethostname())                #IP of the server
         self.broadcastAdd = self.__getBroadcastAdd()                        #Broadcast Address the server will be using
         
-        self.toSendMutex = RLock()                                           #Mutex used to access the 'toSend' stack pile
+        self.toSendMutex = RLock()                                             #Mutex used to access the 'toSend' stack pile
         self.toSend = ["EOS"]                                               #Stack pile stocking the messages to send
 
-        self.receivedMutex = RLock()                                         #Mutex used to access the 'receivedMsg' stack pile
+        self.receivedMutex = RLock()                                           #Mutex used to access the 'receivedMsg' stack pile
         self.receivedMsg = ["EOS"]                                          #Stack pile stocking the received messages
 
     def __sendMsg(self):
         with self.toSendMutex:
             try:
-                self.sock.sendto(self.toSend.pop().encode('utf-8'), (self.broadcastAdd, 37020))
+                self.sock.sendto(self.toSend.pop(1), (self.broadcastAdd, 37020))
             except OSError as err:
                 print("OS error: {0}".format(err))
                 self.sock.close()
@@ -33,8 +35,9 @@ class Server(Thread):
         with self.receivedMutex:
             try:
                 data, addr = self.sock.recvfrom(1024)
-                if(addr[0]!=self.ip):
-                    self.receivedMsg.append(data.decode('utf-8'))
+                msg = Message()
+                #TODO:if(addr[0]!=self.ip):
+                self.receivedMsg.append(msg.decode(data))
             except BlockingIOError as err:
                 print("BlockingIOError: {0}".format(err))
             except socket.timeout:
@@ -59,7 +62,7 @@ class Server(Thread):
         while True:
             if(self.peekStack(self.toSend)):
                 self.__sendMsg()
-
+            
             #self.__recvMsg()
     
     def appendMsg(self, msg):
