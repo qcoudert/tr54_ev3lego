@@ -27,7 +27,7 @@ class NetworkListener(Thread):
         except OSError as err:
             print("OSError: {0}".format(err))
         #TODO: Create filter so that addr is different from self.ip (addr is a bytes array so HF :^) )
-        if(data!=None):
+        if(data!=None and ipaddress.IPv4Address(addr[4:8] != self.ip):
             self.mailbox.append(data.decode('utf-8')) #TODO: use struct to unpack the message in later versions
             print(addr)
             print(ipaddress.IPv4Address(addr[4:8]))
