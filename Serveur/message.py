@@ -1,3 +1,9 @@
+"""This module should have been used to send packed message in a fancy custom way that would have blown your mind away.
+
+But it wasn't compatible with ev3storm's version of python :^)
+
+RIP.."""
+
 import struct
 
 TYPE_SWITCHER = {

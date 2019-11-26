@@ -3,6 +3,7 @@ from pybricks.parameters import (Port, Stop)
 import math
 
 MAX_ANGLE_SPEED = 350
+MAX_SPEED = 800
 
 class Pilot:
     """Pilot class allowing user to drive the robot"""
@@ -31,7 +32,7 @@ class Pilot:
         angleAcc: relative acceleration of the turn (from 0 to 1)
         """
 
-        self.speed = round(850 * (speedPercentage/100))
+        self.speed = round(MAX_SPEED * (speedPercentage/100))
         self.turnItLeft = 0
         self.turnItRight = self.turnItRight + angleAcc
         self.angleSpeed = min(MAX_ANGLE_SPEED, round(((math.log(self.turnItRight)+3)/4)*MAX_ANGLE_SPEED))
@@ -49,7 +50,7 @@ class Pilot:
         angleAcc: relative acceleration of the turn (from 0 to 1)
         """
 
-        self.speed = round(850 * (speedPercentage/100))
+        self.speed = round(MAX_SPEED * (speedPercentage/100))
         self.turnItRight = 0
         self.turnItLeft = self.turnItRight + angleAcc
         self.angleSpeed = min(MAX_ANGLE_SPEED, round(((math.log(self.turnItRight)+3)/4)*MAX_ANGLE_SPEED))
@@ -66,7 +67,7 @@ class Pilot:
         speedPercentage: relative speed the robot should be using while turning
         angleAcc: relative acceleration of the turn (from 0 to 1)
         """
-        self.speed = round(850 * (speedPercentage/100))
+        self.speed = round(MAX_SPEED * (speedPercentage/100))
         self.turnItRight = 0
         self.turnItLeft = self.turnItRight + angleAcc
         self.angleSpeed = min(MAX_ANGLE_SPEED, round((1/math.exp(self.turnItRight*(-2)))*MAX_ANGLE_SPEED))
@@ -84,7 +85,7 @@ class Pilot:
         angleAcc: relative acceleration of the turn (from 0 to 1)
         """
 
-        self.speed = round(850 * (speedPercentage/100))
+        self.speed = round(MAX_SPEED * (speedPercentage/100))
         self.turnItLeft = 0
         self.turnItRight = self.turnItRight + angleAcc
         self.angleSpeed = min(MAX_ANGLE_SPEED, round((1/math.exp(self.turnItRight*(-2)))*MAX_ANGLE_SPEED))
@@ -94,33 +95,33 @@ class Pilot:
 
     def forwardTurn2(self, speedPercentage, angle):
         # angle -100 to 100
-        speed = 850 * (speedPercentage/100)
+        speed = MAX_SPEED * (speedPercentage/100)
         relativeAngle = (speed * angle) / 100
         if(angle<0):
-            self.left_motor.run(speed+2*relativeAngle)
-            self.right_motor.run(speed)
+            self.left_motor.run(self.speed+2*relativeAngle)
+            self.right_motor.run(self.speed)
         elif(angle>0):
-            self.left_motor.run(speed)
-            self.right_motor.run(speed-2*relativeAngle)
+            self.left_motor.run(self.speed)
+            self.right_motor.run(self.speed-2*relativeAngle)
         
     def forwardRelative(self, speedPercentage):
         """Make the robot move forward using relative speed (0 to 100)."""
         
-        s = 850 * (speedPercentage/100) #850 vitesse maximale du robot
+        s = MAX_SPEED * (speedPercentage/100) #MAX_SPEED vitesse maximale du robot
         self.angleSpeed = 0
-        self.left_motor.run(s)
-        self.right_motor.run(s)
+        self.left_motor.run(self.speed)
+        self.right_motor.run(self.speed)
 
     def rotate(self, angle, aSpeed):
         self.left_motor.run_target(aSpeed, angle, Stop.BRAKE, False)
         self.right_motor.run_target(aSpeed, -angle, Stop.BRAKE, True)
 
     def rotateR(self, speed):
-        s = 850 * (speed/100)
+        s = MAX_SPEED * (speed/100)
         self.right_motor.run(s)
 
     def rotateL(self, speed):
-        s = 850 * (speed/100)
+        s = MAX_SPEED * (speed/100)
         self.left_motor.run(s)
 
     
