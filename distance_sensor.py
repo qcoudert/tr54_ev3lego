@@ -5,9 +5,19 @@ from pybricks.tools import print
 class DistanceSensor:
 
     def __init__(self):
-        self.sensor = InfraredSensor(Port.S2)
+        try:
+            self.sensor = InfraredSensor(Port.S2)
+            self.type = "infra"
+        
+        try:
+            self.sensor = UltrasonicSensor(Port.S2)
+            self.type = "ultra"
     
     
     def distance(self):
         #Infra
-        return self.sensor.distance()/2
+        if(self.type = "infra"):
+            return self.sensor.distance()/2
+        #Ultra
+        if(self.type = "ultra"):
+            return self.sensor.distance(False)
