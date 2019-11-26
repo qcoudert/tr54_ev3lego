@@ -94,22 +94,22 @@ class Pilot:
 
     def forwardTurn2(self, speedPercentage, angle):
         # angle -100 to 100
-        speed = 850 * (speedPercentage/100)
-        relativeAngle = (speed * angle) / 100
+        self.speed = 850 * (speedPercentage/100)
+        relativeAngle = (self.speed * angle) / 100
         if(angle<0):
-            self.left_motor.run(speed+2*relativeAngle)
-            self.right_motor.run(speed)
+            self.left_motor.run(self.speed+2*relativeAngle)
+            self.right_motor.run(self.speed)
         elif(angle>0):
-            self.left_motor.run(speed)
-            self.right_motor.run(speed-2*relativeAngle)
+            self.left_motor.run(self.speed)
+            self.right_motor.run(self.speed-2*relativeAngle)
         
     def forwardRelative(self, speedPercentage):
         """Make the robot move forward using relative speed (0 to 100)."""
         
-        s = 850 * (speedPercentage/100) #850 vitesse maximale du robot
+        self.speed = 850 * (speedPercentage/100) #850 vitesse maximale du robot
         self.angleSpeed = 0
-        self.left_motor.run(s)
-        self.right_motor.run(s)
+        self.left_motor.run(self.speed)
+        self.right_motor.run(self.speed)
 
     def rotate(self, angle, aSpeed):
         self.left_motor.run_target(aSpeed, angle, Stop.BRAKE, False)
