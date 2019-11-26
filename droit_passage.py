@@ -9,7 +9,7 @@ from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 import sys, brick_SL
 import pilot, distance_sensor, color_sensor, robot_status, lcd_display, network
-import os
+import os, time
 
 class DPassage:
     def __init__(self):
@@ -19,18 +19,15 @@ class DPassage:
         self.serv_listener = network.NetworkListener(self.ip)
         self.serv_listener.start
 
-    #Assign the robot to the right way (green or orange) 
-    #Color must be a dominantColor method return
-    def addToWay(self, color):
-        if (color == "RED" ):
-            #Send the way and the ip to the server
-            self.serv_sender.sendMessage("RED "+ self.ip)
-            print("sent")
-        elif (color == "GREEN"):
-            #Send the way and the ip to the server
-            self.serv_sender.sendMessage("GREEN "+ self.ip)
-            print("sent")
-
+    #Send the state of the robot to the server 
+    def stateInWay(self, state):
+        if(state == "GREEN"):
+            self.serv_sender.sendMessage("GREEN "+ self.ip + str(time.time()))
+        if(state == "ORANGE"):
+            self.serv_sender.sendMessage("RED "+ self.ip + str(time.time()))
+        if(state == "OOC"):
+            self.serv_sender.sendMessage("OOC "+ self.ip + str(time.time()))
+    
     #The server give or not the right to pass (return true or false)
     def canPass(self):
         #The server return the IP and the message "YES"
@@ -53,6 +50,8 @@ class DPassage:
             return True
         else:
             return False
+
+    
 
 
 
