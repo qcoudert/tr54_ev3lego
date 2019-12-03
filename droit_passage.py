@@ -8,16 +8,16 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color,
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 import sys, brick_SL
-import pilot, distance_sensor, color_sensor, robot_status, lcd_display, network
+import pilot, color_sensor, robot_status, lcd_display, network
 import os, time
 
 class DPassage:
-    def __init__(self):
+    def __init__(self, ip):
         self.isAllowedToPass = False
-        self.ip = "192.168.43.87"
-        self.serv_sender = network.MessageSender(self.ip, serv_listener.sock)
+        self.ip = ip
         self.serv_listener = network.NetworkListener(self.ip)
-        self.serv_listener.start
+        self.serv_listener.start()
+        self.serv_sender = network.MessageSender(self.ip, self.serv_listener.sock)
 
     #Send the state of the robot to the server 
     def stateInWay(self, state):
@@ -30,15 +30,15 @@ class DPassage:
     
     #The server give or not the right to pass (return true or false)
     def canPass(self):
-        #The server return the IP and the message "YES"
-        if (self.serv_listener.mailbox[0].split()[0] == self.ip and self.serv_listener.mailbox[0].split()[1] == "YES"):
-            #Delete the message
-            self.serv_listener.mailbox.pop(0)
-            self.isAllowedToPass = True
-            return self.isAllowedToPass
-        else:
-            self.isAllowedToPass = False
-            return self.isAllowedToPass
+        self.isAllowedToPass = False
+        if(self.serv_listener.mailbox):
+            #The server return the IP and the message "YES"
+            if (self.serv_listener.mailbox[0].split()[0] == self.ip and self.serv_listener.mailbox[0].split()[1] == "YES"):
+                #Delete the message
+                self.serv_listener.mailbox.pop(0)
+                self.isAllowedToPass = True            
+        
+        return self.isAllowedToPass
 
     #Return true if the robot has passed the intersection and send it to the server
     def hasPassed(self, distReached, securityDistance):

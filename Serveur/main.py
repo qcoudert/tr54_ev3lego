@@ -1,4 +1,5 @@
 from network import NetworkListener, MessageSender
+
 import time
 
 listener = NetworkListener()
@@ -13,13 +14,13 @@ isRunning = False
 greenIsRunning = False
 orangeIsRunning = False
 
-
+"""
 while (1):
     #Chaque robot qui entre dans la zone d'entrée envoie sa voie et son temps, on vérifie l'ip pour ne l'ajouter qu'une fois dans la liste
     #On ajoute dans la liste l'ip u robot ainsi que son timing de la façon suivante liste = [[ip1,tps1],[ip2,tps2],..]
     if(listener.mailbox):    
-            msg = listener.mailbox.pop(0)
-        if (msg.split()[0] == "RED" and msg.split()[1] not in orangeWay):
+        msg = listener.mailbox.pop(0)
+        if (msg.split()[0] == "RED"):
             orangeWay.append( [msg.split()[1],msg.split()[2]] )
         if (msg.split()[0]== "GREEN" and msg.split()[1] not in greenWay):
             greenWay.append( [msg.split()[1],msg.split()[2]] )
@@ -32,6 +33,8 @@ while (1):
                 if(msg.split()[1] == orangeWay[elt][0]):
                     orangeWay.pop(elt)
 
+    print(greenWay)
+    print(orangeWay)
 
     #Si on est en cours de traitement
     if(isRunning == True):
@@ -62,14 +65,29 @@ while (1):
     if (isRunning == False):
         #On compare les liste pour savoir quelle voie est prioritaire (celle qui a eu le premier véhicule arrivé est prioritaire)
         #Vert prioritaire
-        if (greenWay[0][1] < orangeWay[0][1] ):
-            isRunning = True
-            greenIsRunning = True
-        #Orange prioritaire
-        if ( greenWay[0][1] > orangeWay[0][1] ):
-            isRunning = True
-            orangeIsRunning = True
-        #Si les temps sont égaux alors ont choisit arbitrairement l'orange comme voie prioritaire
-        if ( greenWay[0][1] == orangeWay[0][1] ):
-            isRunning = True
-            orangeIsRunning = True
+        if(greenWay and orangeWay):
+            if (greenWay[0][1] < orangeWay[0][1] ):
+                isRunning = True
+                greenIsRunning = True
+            #Orange prioritaire
+            elif ( greenWay[0][1] > orangeWay[0][1] ):
+                isRunning = True
+                orangeIsRunning = True
+            #Si les temps sont égaux alors ont choisit arbitrairement l'orange comme voie prioritaire
+            elif ( greenWay[0][1] == orangeWay[0][1] ):
+                isRunning = True
+                orangeIsRunning = True
+        elif(not(greenWay) and not(orangeWay)):
+            isRunning=False
+            orangeIsRunning=False
+            greenIsRunning=False
+        elif(not(greenWay)):
+            isRunning=True
+            orangeIsRunning=True
+        else:
+            isRunning=True
+            greenIsRunning=True
+"""
+
+while(1):
+    sender.sendMessage("Ping!")

@@ -1,7 +1,5 @@
 from threading import Thread
 import socket
-from pybricks.tools import print
-import ipaddress
 
 class NetworkListener(Thread):
     """Class allowing the server to listen any message that came through network
@@ -11,9 +9,12 @@ class NetworkListener(Thread):
     """
 
     def __init__(self):
+        super(NetworkListener, self).__init__()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
         self.sock.bind(("", 37020))                                         #Bind the socket to listen any message on port 37020
+        self.sock.setblocking(True)
+        self.sock.settimeout(0.5)
 
         self.ip = socket.gethostbyname(socket.gethostname())                #IP of the server
 
@@ -22,15 +23,15 @@ class NetworkListener(Thread):
     def __listen(self):
         """Listen any message that comes through port 37020"""
         data = None
+        print("Listening...")
         try:
             data, addr = self.sock.recvfrom(1024)
-        except OSError as err:
-            print("OSError: {0}".format(err))
-        if(addr[0]!=self.ip):
-            self.mailbox.append(data.decode('utf-8'))
-            print(addr)
-            print(ipaddress.IPv4Address(addr[4:8]))
-            print("------------")
+            if(addr[0]!=self.ip):
+                self.mailbox.append(data.decode('utf-8'))
+        except BlockingIOError as err:
+            print("BlockingIOError: {0}".format(err))
+        except socket.timeout:
+            None
 
     def run(self):
         while(1):
