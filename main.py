@@ -21,6 +21,7 @@ pilote = pilot.Pilot()
 
 while(1):
     rgbColor = colorS.rgb()
-    if(colorS.dominantColor(rgbColor))
+    if(colorS.dominantColor(rgbColor) == "RED"):
+        print("lol")
     
 

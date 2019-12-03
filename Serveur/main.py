@@ -1,11 +1,11 @@
-from communication import Server
+from network import NetworkListener, MessageSender
 import time
 
-server = Server()
-server.start()
-print(server.ip)
-print(server.broadcastAdd)
+listener = NetworkListener()
+listener.start()
 
+sender = MessageSender(listener.ip, listener.sock)
+print(listener.ip)
 
 greenWay = []
 orangeWay = []
@@ -17,26 +17,27 @@ orangeIsRunning = False
 while (1):
     #Chaque robot qui entre dans la zone d'entrée envoie sa voie et son temps, on vérifie l'ip pour ne l'ajouter qu'une fois dans la liste
     #On ajoute dans la liste l'ip u robot ainsi que son timing de la façon suivante liste = [[ip1,tps1],[ip2,tps2],..]
-    msg = server.readMsg()
-    if (msg.split()[0] == "RED" and msg.split()[1] not in orangeWay):
-        orangeWay.append( [msg.split()[1],msg.split()[2]] )
-    if (msg.split()[0]== "GREEN" and msg.split()[1] not in greenWay):
-        greenWay.append( [msg.split()[1],msg.split()[2]] )
-    #Si le robot n'est plus dans la zone d'entrée/conflit alors on le supprime des listes de passage
-    if (msg.split()[0]== "OOC"):
-        for elt in greenWay:
-            if(msg.split()[1] == greenWay[elt][0]):
-                orangeWay.pop(elt)
-        for elt in orangeWay:
-            if(msg.split()[1] == orangeWay[elt][0]):
-                orangeWay.pop(elt)
+    if(listener.mailbox):    
+            msg = listener.mailbox.pop(0)
+        if (msg.split()[0] == "RED" and msg.split()[1] not in orangeWay):
+            orangeWay.append( [msg.split()[1],msg.split()[2]] )
+        if (msg.split()[0]== "GREEN" and msg.split()[1] not in greenWay):
+            greenWay.append( [msg.split()[1],msg.split()[2]] )
+        #Si le robot n'est plus dans la zone d'entrée/conflit alors on le supprime des listes de passage
+        if (msg.split()[0]== "OOC"):
+            for elt in greenWay:
+                if(msg.split()[1] == greenWay[elt][0]):
+                    orangeWay.pop(elt)
+            for elt in orangeWay:
+                if(msg.split()[1] == orangeWay[elt][0]):
+                    orangeWay.pop(elt)
 
 
     #Si on est en cours de traitement
     if(isRunning == True):
         if(greenIsRunning == True):
             for elt in greenWay:
-                Server.serv_sender.sendMessage(greenWay[elt][0] + " " + "YES")
+                sender.sendMessage(greenWay[elt][0] + " " + "YES")
             #Une fois que tous les robots de liste vertes sont passés alors la liste est vide et on peut faire passer ceux de la liste orange
             if(not greenWay):
                 greenIsRunning = False
@@ -44,7 +45,7 @@ while (1):
                 
         if(orangeIsRunning == True):
             for elt in orangeWay:
-                Server.serv_sender.sendMessage(greenWay[elt][0] + " " + "YES")
+                sender.sendMessage(greenWay[elt][0] + " " + "YES")
             #Une fois que tous les robots de liste vertes sont passés alors la liste est vide et on peut faire passer ceux de la liste orange
             if(not orangeWay):
                 orangeIsRunning = False
