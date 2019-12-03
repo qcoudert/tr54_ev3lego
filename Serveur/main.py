@@ -72,26 +72,3 @@ while (1):
         if ( greenWay[0][1] == orangeWay[0][1] ):
             isRunning = True
             orangeIsRunning = True
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-i = 0
-while(i < 100):
-    print("Iteration " + str(i))
-    server.appendMsg(str(time.time()))
-    msg = server.readMsg()
-    if(msg!=None):
-        print(msg)
-    time.sleep(1)
-    i = i + 1

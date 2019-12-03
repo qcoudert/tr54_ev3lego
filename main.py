@@ -8,23 +8,19 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color,
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 import sys, brick_SL
-import pilot, distance_sensor, color_sensor, lcd_display, robot_status
+import pilot, distance_sensor, color_sensor, lcd_display, robot_status, droit_passage
 import os
 
 # Write your program here
 brick.sound.beep(200, 100)
 print(sys.version_info)
 
+dp= droit_passage.DPassage()
+colorS = color_sensor.CSensor()
 pilote = pilot.Pilot()
 
-pilote.forward(200)
-tracker = robot_status.DistanceTracker(pilote)
-tracker.update()
-wait(2000)
-pilote.forward(0)
-tracker.update()
-
-brick.display.text(str(tracker.distanceTraveled()))
 while(1):
-    None
+    rgbColor = colorS.rgb()
+    if(colorS.dominantColor(rgbColor))
+    
 
