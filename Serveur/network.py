@@ -4,18 +4,18 @@ from pybricks.tools import print
 import ipaddress
 
 class NetworkListener(Thread):
-    """Class allowing users to listen any message that came through network
+    """Class allowing the server to listen any message that came through network
 
     This class is using a socket to listen any UDP broadcast sent to the port 37020.
     This listener is running asynchronously and should be started with NetworkListener.start()
     """
 
-    def __init__(self, ip):
+    def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
         self.sock.bind(("", 37020))                                         #Bind the socket to listen any message on port 37020
 
-        self.ip = ip                                                        #IP of the user
+        self.ip = socket.gethostbyname(socket.gethostname())                #IP of the server
 
         self.mailbox = []                                                   #Array that contains any message listened
         
@@ -26,7 +26,7 @@ class NetworkListener(Thread):
             data, addr = self.sock.recvfrom(1024)
         except OSError as err:
             print("OSError: {0}".format(err))
-        if(data!=None and ipaddress.IPv4Address(addr[4:8] != self.ip):
+        if(addr[0]!=self.ip):
             self.mailbox.append(data.decode('utf-8'))
             print(addr)
             print(ipaddress.IPv4Address(addr[4:8]))
