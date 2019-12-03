@@ -22,11 +22,11 @@ class DPassage:
     #Send the state of the robot to the server 
     def stateInWay(self, state):
         if(state == "GREEN"):
-            self.serv_sender.sendMessage("GREEN "+ self.ip + str(time.time()))
+            self.serv_sender.sendMessage("GREEN "+ self.ip + " " + str(time.time()))
         if(state == "ORANGE"):
-            self.serv_sender.sendMessage("RED "+ self.ip + str(time.time()))
+            self.serv_sender.sendMessage("RED "+ self.ip + " " + str(time.time()))
         if(state == "OOC"):
-            self.serv_sender.sendMessage("OOC "+ self.ip + str(time.time()))
+            self.serv_sender.sendMessage("OOC "+ self.ip + " " + str(time.time()))
     
     #The server give or not the right to pass (return true or false)
     def canPass(self):
