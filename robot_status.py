@@ -39,11 +39,11 @@ class DistanceTracker:
         self.log = []
 
     def update(self):
-        if(self.lastRegisteredSpeed!= self.pilot.speed):
+        if(self.lastRegisteredSpeed!= self.pilot.speed * self.pilot.dist_proportion):
             self.timeEnd = time.time()
             tp = TimedPosition(self.timeBegin, self.timeEnd, self.lastRegisteredSpeed)
             self.log.append(tp)
-            self.lastRegisteredSpeed = self.pilot.speed
+            self.lastRegisteredSpeed = self.pilot.speed * self.pilot.dist_proportion
             self.timeBegin = self.timeEnd
 
     """Time to travel to the end at 850: 5.3"""

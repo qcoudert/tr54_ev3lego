@@ -2,11 +2,13 @@ import pilot, distance_sensor, color_sensor, robot_status, lcd_display, log, col
 from pybricks.parameters import Color
 
 
-ACCELERATION = 10
+ACCELERATION = 20
 MAX_SPEED = 70
 ANGLE_MAX = 70
 ANGLE_MIN = 30
 TURNING_TIME_MAX = 2
+DISTANCE_INTERSECTION = 45
+
 
 class PathFinding :
     def __init__(self):
@@ -30,9 +32,38 @@ class PathFinding :
         old_speed = self.speed
         self.speed = min(speedCollision, self.speed + delta*ACCELERATION) #MAX_SPEED*(0.5*self.phaseVirage+0.5),
 
-        self.path_color = self.color_cs.color()
+        self.path_color = self.color_cs.dominantColor2()
 
-        
+        if(self.path_color==Color.WHITE):
+            self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)
+        elif(self.path_color==Color.BLUE or self.path_color==Color.GREEN or self.path_color==Color.RED):
+            self.pilote.forwardRelative(self.speed)
+        elif(self.path_color==Color.BLACK):
+            self.pilote.forwardTurn2(self.speed, -ANGLE_MAX + (ANGLE_MAX-ANGLE_MIN) * self.phaseVirage * self.phaseVirage)
+
+        """
+        if(self.path_color==Color.WHITE):
+            self.pilote.forwardTurnRightExp(self.speed, 0.2)
+        elif(self.path_color==Color.BLUE or self.path_color==Color.GREEN or self.path_color==Color.ORANGE):
+            self.pilote.forwardRelative(self.speed)
+        elif(self.path_color==Color.BLACK):
+            self.pilote.forwardTurnLeftExp(self.speed, 0.2)
+        """
+        if(self.phaseVirage - (1/TURNING_TIME_MAX)*delta > 0):
+            self.phaseVirage = self.phaseVirage - (1/TURNING_TIME_MAX)*delta
+
+        if(self.path_color != self.phase):
+            self.phase = self.path_color
+            self.phaseVirage = 1
+    
+
+    def stopIntersection(self, delta, distance):
+        speedCollision = self.m_collision_management.collisionSpeed(MAX_SPEED - MAX_SPEED * (distance/DISTANCE_INTERSECTION))
+        old_speed = self.speed
+        self.speed = min(speedCollision, self.speed + delta*ACCELERATION) #MAX_SPEED*(0.5*self.phaseVirage+0.5),
+
+        self.path_color = self.color_cs.dominantColor2()
+
         if(self.path_color==Color.WHITE):
             self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)
         elif(self.path_color==Color.BLUE or self.path_color==Color.GREEN or self.path_color==Color.ORANGE):
@@ -54,3 +85,5 @@ class PathFinding :
         if(self.path_color != self.phase):
             self.phase = self.path_color
             self.phaseVirage = 1
+
+        return (distance < DISTANCE_INTERSECTION)
