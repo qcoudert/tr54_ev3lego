@@ -8,19 +8,40 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color,
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 import sys, brick_SL
-import pilot, distance_sensor, color_sensor, lcd_display, robot_status, droit_passage
+import pilot, color_sensor, lcd_display, robot_status, droit_passage
+from network import MessageSender, NetworkListener
 import os
 
 # Write your program here
 brick.sound.beep(200, 100)
 print(sys.version_info)
 
-dp= droit_passage.DPassage()
+
+dp= droit_passage.DPassage("192.168.137.147")
 colorS = color_sensor.CSensor()
 pilote = pilot.Pilot()
 
 while(1):
     rgbColor = colorS.rgb()
-    print(colorS.dominantColor(rgbColor))
-    
+    brick.display.text(colorS.dominantColor(rgbColor))
+    """if(colorS.dominantColor(rgbColor) == "RED"):
+        if(dp.canPass()):
+            while(1):
+                brick.display.text("ROUGE PEUT PASSER")
+        dp.stateInWay("ORANGE")
+    if(colorS.dominantColor(rgbColor) == "GREEN"):
+        if(dp.canPass()):
+            while(1):
+                brick.display.text("VERT PEUT PASSER")
+        dp.stateInWay("GREEN")
+    if(colorS.dominantColor(rgbColor) == "BLUE"):
+        dp.canPass()
+        dp.stateInWay("OOC")
+"""
 
+listener = NetworkListener("192.168.137.162")
+sender = MessageSender("192.168.137.162", listener.sock)
+
+while(1):
+    sender.sendMessage("Ping!")
+    wait(100)

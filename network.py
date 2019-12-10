@@ -26,7 +26,7 @@ class NetworkListener(Thread):
             data, addr = self.sock.recvfrom(1024)
         except OSError as err:
             print("OSError: {0}".format(err))
-        if(data!=None and ipaddress.IPv4Address(addr[4:8] != self.ip):
+        if((data!=None) and (str(ipaddress.IPv4Address(addr[4:8])) != self.ip)):
             self.mailbox.append(data.decode('utf-8'))
             print(addr)
             print(ipaddress.IPv4Address(addr[4:8]))
@@ -61,7 +61,8 @@ class MessageSender:
         """Broadcast a string message with the provided socket"""
         try:
             self.sock.sendto(message.encode('utf-8'), (self.getBroadcastAdd(), 37020))
-            
         except OSError as err:
             print("OS error: {0}".format(err))
+            return False
+        return True
 
