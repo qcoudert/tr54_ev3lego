@@ -120,7 +120,8 @@ class CSensor:
         h = (h/6.0) % 1.0
         return h, l, s
 
-    def dominantColor3(self, rgb):
+    def dominantColor3(self):
+        rgb = self.rgb()
         TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 255, 0), "BLUE": (0, 0, 255), "WHITE": (255, 255, 255)}
 
         my_color = tuple(rgb)
