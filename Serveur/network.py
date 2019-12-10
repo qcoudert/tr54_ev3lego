@@ -23,14 +23,8 @@ class NetworkListener(Thread):
     def __listen(self):
         """Listen any message that comes through port 37020"""
         data = None
-        print("Listening...")
         try:
             data, addr = self.sock.recvfrom(1024)
-            print('----------------')
-            print('Received message')
-            print(self.ip)
-            print(addr)
-            print('----------------')
             if(addr[0]!=self.ip):
                 self.mailbox.append(data.decode('utf-8'))
         except BlockingIOError as err:

@@ -39,12 +39,5 @@ while(1):
     if(colorS.dominantColor(rgbColor) == "BLUE"):
         dp.canPass()
         dp.stateInWay("OOC")
-"""
 
-listener = NetworkListener("192.168.137.147")
-listener.start()
-sender = MessageSender("192.168.137.147")
-
-while(1):
-    sender.sendMessage("Hello")
-    wait(500)
+    wait(1000)
