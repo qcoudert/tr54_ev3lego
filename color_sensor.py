@@ -3,6 +3,7 @@ from pybricks.parameters import (Port, Color)
 from pybricks.tools import print
 
 
+
 class CSensor:
     
 
@@ -85,3 +86,52 @@ class CSensor:
                return "RED"
         elif(rgb[2] > rgb[1] and rgb[2] > rgb[0]):
                return "BLUE"
+
+    def color_difference (self, color1, color2):
+        return sum([abs(component1-component2) for component1, component2 in zip(color1, color2)])
+
+
+    def rgb_to_hls(self, r, g, b):
+        if (max(r, g, b) == 0):
+            maxc = 0.002
+        else:
+            maxc = max(r, g, b)
+        if(min(r, g, b) == 0):
+            minc = 0.001
+        else:
+            minc = min(r, g, b)
+        # XXX Can optimize (maxc+minc) and (maxc-minc)
+        l = (minc+maxc)/2.0
+        if minc == maxc:
+            return 0.0, l, 0.0
+        if l <= 0.5:
+            s = (maxc-minc) / (maxc+minc)
+        else:
+            s = (maxc-minc) / (2.0-maxc-minc)
+        rc = (maxc-r) / (maxc-minc)
+        gc = (maxc-g) / (maxc-minc)
+        bc = (maxc-b) / (maxc-minc)
+        if r == maxc:
+            h = bc-gc
+        elif g == maxc:
+            h = 2.0+rc-bc
+        else:
+            h = 4.0+gc-rc
+        h = (h/6.0) % 1.0
+        return h, l, s
+
+    def dominantColor3(self, rgb):
+        TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 255, 0), "BLUE": (0, 0, 255), "WHITE": (255, 255, 255)}
+
+        my_color = tuple(rgb)
+        hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
+        differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
+        differences.sort() 
+        my_color_name = differences[0][1]
+        print(hsl_color)
+        if(hsl_color[1]<10):
+            return "BLACK"
+        elif(hsl_color[1]>60):
+            return "WHITE" 
+        else:
+            return(my_color_name)

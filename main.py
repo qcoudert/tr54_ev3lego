@@ -21,9 +21,11 @@ dp= droit_passage.DPassage("192.168.137.147")
 colorS = color_sensor.CSensor()
 pilote = pilot.Pilot()
 
+
+
 while(1):
     rgbColor = colorS.rgb()
-    brick.display.text(colorS.dominantColor(rgbColor))
+    brick.display.text(colorS.dominantColor3(rgbColor))
     """if(colorS.dominantColor(rgbColor) == "RED"):
         if(dp.canPass()):
             while(1):
@@ -38,10 +40,10 @@ while(1):
         dp.canPass()
         dp.stateInWay("OOC")
 """
-
+"""
 listener = NetworkListener("192.168.137.162")
-sender = MessageSender("192.168.137.162", listener.sock)
-
+sender = MessageSender("192.168.137.162", listener.sock)"""
+"""
 while(1):
     sender.sendMessage("Ping!")
-    wait(100)
+    wait(100)"""
