@@ -1,4 +1,3 @@
-#!user/bin/env python3
 from network import NetworkListener, MessageSender
 import utils
 import time
