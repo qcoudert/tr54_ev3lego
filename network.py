@@ -13,24 +13,33 @@ class NetworkListener(Thread):
     def __init__(self, ip):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
-        self.sock.bind(("", 37020))                                         #Bind the socket to listen any message on port 37020
+        self.sock.bind(("", 37030))                                         #Bind the socket to listen any message on port 37020
 
         self.ip = ip                                                        #IP of the user
 
         self.mailbox = []                                                   #Array that contains any message listened
         
     def __listen(self):
-        """Listen any message that comes through port 37020"""
+        """Listen any message that comes through port 37030"""
+        
+        #Try to get the data
         data = None
         try:
             data, addr = self.sock.recvfrom(1024)
         except OSError as err:
             print("OSError: {0}".format(err))
-        if((data!=None) and (str(ipaddress.IPv4Address(addr[4:8])) != self.ip)):
+        
+        #Get address from bytes
+        addr = str(ipaddress.IPv4Address(addr[4:8]))
+        print('----------------')
+        print('Received message')
+        print(self.ip)
+        print(addr)
+        print('----------------')
+
+        #If the address from receiver is different from sender then we store the message
+        if((data!=None) and (addr != self.ip)):
             self.mailbox.append(data.decode('utf-8'))
-            print(addr)
-            print(ipaddress.IPv4Address(addr[4:8]))
-            print("------------")
 
     def run(self):
         while(1):
@@ -38,7 +47,7 @@ class NetworkListener(Thread):
 
 class MessageSender:
 
-    def __init__(self, ip, socket):
+    def __init__(self, ip):
         """Initialize the object
 
         'ip' must be a string with the ip of the user
@@ -46,10 +55,13 @@ class MessageSender:
         socket should often use the same socket than the NetworkListener in this project
         """
 
-        self.sock = socket  #Socket object used to broadcast messages
-        self.ip = ip   #IP of the user
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
+        self.ip = ip                                                        #IP of the user
+        self.broadAddr = self.getBroadcastAdd()                             #Broadcast Address
 
     def getBroadcastAdd(self):
+        """Get the broadcast address from ip"""
         i = j = len(self.ip)
         while(self.ip[i-1]!='.'):
             i = i-1
@@ -59,10 +71,14 @@ class MessageSender:
 
     def sendMessage(self, message):
         """Broadcast a string message with the provided socket"""
+        
+        print('--------------')
+        print('Sending message to broadcast address: ' + self.broadAddr)
+        print('--------------')
+
         try:
-            self.sock.sendto(message.encode('utf-8'), (self.getBroadcastAdd(), 37020))
+            self.sock.sendto(message.encode('utf-8'), (self.broadAddr, 37020))
         except OSError as err:
             print("OS error: {0}".format(err))
             return False
         return True
-

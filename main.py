@@ -40,10 +40,11 @@ while(1):
         dp.canPass()
         dp.stateInWay("OOC")
 """
-"""
-listener = NetworkListener("192.168.137.162")
-sender = MessageSender("192.168.137.162", listener.sock)"""
-"""
+
+listener = NetworkListener("192.168.137.147")
+listener.start()
+sender = MessageSender("192.168.137.147")
+
 while(1):
-    sender.sendMessage("Ping!")
-    wait(100)"""
+    sender.sendMessage("Hello")
+    wait(500)
