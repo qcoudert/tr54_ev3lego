@@ -17,7 +17,7 @@ class DPassage:
         self.ip = ip
         self.serv_listener = network.NetworkListener(self.ip)
         self.serv_listener.start()
-        self.serv_sender = network.MessageSender(self.ip, self.serv_listener.sock)
+        self.serv_sender = network.MessageSender(self.ip)
 
     #Send the state of the robot to the server 
     def stateInWay(self, state):

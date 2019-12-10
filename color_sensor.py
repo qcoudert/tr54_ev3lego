@@ -40,7 +40,11 @@ class CSensor:
         return color_type
 
     def rgb(self):
-        return self.sensor.rgb()
+        rgb = self.sensor.rgb()
+        r = (rgb[0]/100)*255
+        g = (rgb[1]/100)*255
+        b = (rgb[2]/100)*255
+        return r,g,b
 
     def hsv(self):
         r, g, b = rgb[0]/255.0, rgb[1]/255.0, rgb[2]/255.0
@@ -66,7 +70,7 @@ class CSensor:
         rgb = self.rgb()
         if(rgb[0] <30 and rgb[1] < 30 and rgb[2] <30):
             return Color.BLACK
-        elif(rgb[0] + rgb[1] + rgb[2] > 180):
+        elif(rgb[0] + rgb[1] + rgb[2] > 510):
             return Color.WHITE  
         elif(rgb[1] > rgb[0] and rgb[1] > rgb[2]):
             return Color.GREEN
@@ -75,10 +79,11 @@ class CSensor:
         elif(rgb[2] > rgb[1] and rgb[2] > rgb[0]):
                return Color.BLUE
 
-    def dominantColor(self, rgb):
+    def dominantColor(self):
+        rgb = self.rgb()
         if(rgb[0] <30 and rgb[1] < 30 and rgb[2] <30):
             return "BLACK"
-        elif(rgb[0] + rgb[1] + rgb[2] > 180):
+        elif(rgb[0] + rgb[1] + rgb[2] > 510):
             return "WHITE"   
         elif(rgb[1] > rgb[0] and rgb[1] > rgb[2]):
             return "GREEN"
@@ -122,17 +127,18 @@ class CSensor:
 
     def dominantColor3(self):
         rgb = self.rgb()
-        TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 255, 0), "BLUE": (0, 0, 255), "WHITE": (255, 255, 255)}
-
+        print(rgb)
+        #TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 215, 0), "BLUE": (0, 0, 255), "BLACK": (0, 0, 0), "WHITE": (255, 255, 255)}
+        TARGET_COLORS = {"RED": (134, 35, 10), "GREEN": (115, 175, 67), "BLUE": (17, 57, 150), "BLACK": (7, 15, 1), "WHITE": (120, 137, 210), "BLACK2": (45, 83, 18), "BLACK3": (66, 116, 72)}
         my_color = tuple(rgb)
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
         differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
         differences.sort() 
         my_color_name = differences[0][1]
         print(hsl_color)
-        if(hsl_color[1]<10):
+        if(my_color_name == "BLACK" and hsl_color[1]>30):
+            return "GREEN"
+        else if(my_color_name == "BLACK" and hsl_color[1]<30):
             return "BLACK"
-        elif(hsl_color[1]>60):
-            return "WHITE" 
         else:
             return(my_color_name)

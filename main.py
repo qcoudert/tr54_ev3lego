@@ -25,7 +25,7 @@ pilote = pilot.Pilot()
 
 while(1):
     rgbColor = colorS.rgb()
-    brick.display.text(colorS.dominantColor3(rgbColor))
+    brick.display.text(colorS.dominantColor3())
     """if(colorS.dominantColor(rgbColor) == "RED"):
         if(dp.canPass()):
             while(1):
