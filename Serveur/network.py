@@ -10,11 +10,11 @@ class NetworkListener(Thread):
 
     def __init__(self):
         super(NetworkListener, self).__init__()
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)        #Creating the socket
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
         self.sock.bind(("", 37020))                                         #Bind the socket to listen any message on port 37020
-        self.sock.setblocking(True)
-        self.sock.settimeout(0.5)
+        self.sock.setblocking(0)
+        self.sock.settimeout(None)
 
         self.ip = socket.gethostbyname(socket.gethostname())                #IP of the server
 
@@ -26,6 +26,11 @@ class NetworkListener(Thread):
         print("Listening...")
         try:
             data, addr = self.sock.recvfrom(1024)
+            print('----------------')
+            print('Received message')
+            print(self.ip)
+            print(addr)
+            print('----------------')
             if(addr[0]!=self.ip):
                 self.mailbox.append(data.decode('utf-8'))
         except BlockingIOError as err:
@@ -49,6 +54,7 @@ class MessageSender:
 
         self.sock = socket  #Socket object used to broadcast messages
         self.ip = ip   #IP of the user
+        self.broadAddr = self.getBroadcastAdd()
 
     def getBroadcastAdd(self):
         i = j = len(self.ip)
@@ -61,7 +67,7 @@ class MessageSender:
     def sendMessage(self, message):
         """Broadcast a string message with the provided socket"""
         try:
-            self.sock.sendto(message.encode('utf-8'), (self.getBroadcastAdd(), 37020))
+            self.sock.sendto(message.encode('utf-8'), (self.broadAddr, 37020))
             
         except OSError as err:
             print("OS error: {0}".format(err))

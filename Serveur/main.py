@@ -1,10 +1,10 @@
+#!user/bin/env python3
 from network import NetworkListener, MessageSender
 
 import time
 
 listener = NetworkListener()
 listener.start()
-
 sender = MessageSender(listener.ip, listener.sock)
 print(listener.ip)
 
@@ -90,4 +90,5 @@ while (1):
 """
 
 while(1):
-    sender.sendMessage("Ping!")
+    if(listener.mailbox):
+        print(listener.mailbox.pop())

@@ -39,9 +39,10 @@ while(1):
         dp.stateInWay("OOC")
 """
 
-listener = NetworkListener("192.168.137.162")
-sender = MessageSender("192.168.137.162", listener.sock)
+listener = NetworkListener("192.168.137.147")
+listener.start()
+sender = MessageSender("192.168.137.147", listener.sock)
 
 while(1):
-    sender.sendMessage("Ping!")
-    wait(100)
+    if(listener.mailbox):
+        print(listener.mailbox.pop())
