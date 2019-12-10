@@ -12,9 +12,9 @@ import pilot, distance_sensor, color_sensor, robot_status, lcd_display, network
 import os, time
 
 class DPassage:
-    def __init__(self):
+    def __init__(self, ip):
         self.isAllowedToPass = False
-        self.ip = "192.168.43.87"
+        self.ip = ip
         self.serv_sender = network.MessageSender(self.ip, serv_listener.sock)
         self.serv_listener = network.NetworkListener(self.ip)
         self.serv_listener.start
