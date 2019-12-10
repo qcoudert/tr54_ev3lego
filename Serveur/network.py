@@ -44,17 +44,19 @@ class NetworkListener(Thread):
 
 class MessageSender:
 
-    def __init__(self, ip, socket):
+    def __init__(self):
         """Initialize the object
 
         'ip' must be a string with the ip of the user
-        'socket' will be the socket object used to UDP broadcast messages
+        'socket' will be the socket object used to UDP broadcast messages to port 37030 (default listening port for robots)
         socket should often use the same socket than the NetworkListener in this project
         """
 
-        self.sock = socket  #Socket object used to broadcast messages
-        self.ip = ip   #IP of the user
-        self.broadAddr = self.getBroadcastAdd()
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)        #Creating the socket
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)                         #Setting socket options
+
+        self.ip = socket.gethostbyname(socket.gethostname())                                    #IP of the user
+        self.broadAddr = self.getBroadcastAdd()                                                 #Broadcast Address to use
 
     def getBroadcastAdd(self):
         i = j = len(self.ip)
@@ -67,7 +69,7 @@ class MessageSender:
     def sendMessage(self, message):
         """Broadcast a string message with the provided socket"""
         try:
-            self.sock.sendto(message.encode('utf-8'), (self.broadAddr, 37020))
+            self.sock.sendto(message.encode('utf-8'), (self.broadAddr, 37030))
             
         except OSError as err:
             print("OS error: {0}".format(err))

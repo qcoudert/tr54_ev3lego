@@ -13,14 +13,14 @@ class NetworkListener(Thread):
     def __init__(self, ip):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
-        self.sock.bind(("", 37020))                                         #Bind the socket to listen any message on port 37020
+        self.sock.bind(("", 37030))                                         #Bind the socket to listen any message on port 37020
 
         self.ip = ip                                                        #IP of the user
 
         self.mailbox = []                                                   #Array that contains any message listened
         
     def __listen(self):
-        """Listen any message that comes through port 37020"""
+        """Listen any message that comes through port 37030"""
         
         #Try to get the data
         data = None
@@ -47,7 +47,7 @@ class NetworkListener(Thread):
 
 class MessageSender:
 
-    def __init__(self, ip, socket):
+    def __init__(self, ip):
         """Initialize the object
 
         'ip' must be a string with the ip of the user
@@ -55,9 +55,10 @@ class MessageSender:
         socket should often use the same socket than the NetworkListener in this project
         """
 
-        self.sock = socket                          #Socket object used to broadcast messages
-        self.ip = ip                                #IP of the user
-        self.broadAddr = self.getBroadcastAdd()
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        #Creating the socket
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
+        self.ip = ip                                                        #IP of the user
+        self.broadAddr = self.getBroadcastAdd()                             #Broadcast Address
 
     def getBroadcastAdd(self):
         """Get the broadcast address from ip"""
@@ -81,4 +82,3 @@ class MessageSender:
             print("OS error: {0}".format(err))
             return False
         return True
-

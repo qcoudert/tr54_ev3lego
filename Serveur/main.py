@@ -5,7 +5,7 @@ import time
 
 listener = NetworkListener()
 listener.start()
-sender = MessageSender(listener.ip, listener.sock)
+sender = MessageSender()
 print(listener.ip)
 
 greenWay = []

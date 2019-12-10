@@ -41,8 +41,8 @@ while(1):
 
 listener = NetworkListener("192.168.137.147")
 listener.start()
-sender = MessageSender("192.168.137.147", listener.sock)
+sender = MessageSender("192.168.137.147")
 
 while(1):
-    if(listener.mailbox):
-        print(listener.mailbox.pop())
+    sender.sendMessage("Hello")
+    wait(500)
