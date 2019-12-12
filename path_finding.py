@@ -1,14 +1,13 @@
 import pilot, distance_sensor, color_sensor, robot_status, lcd_display, log, collision_management
 from pybricks.parameters import Color
-
+import droit_passage
 
 ACCELERATION = 20
 MAX_SPEED = 70
 ANGLE_MAX = 70
 ANGLE_MIN = 30
 TURNING_TIME_MAX = 2
-DISTANCE_INTERSECTION = 45
-
+DISTANCE_INTERSECTION = 45 
 
 class PathFinding :
     def __init__(self):
@@ -32,7 +31,7 @@ class PathFinding :
         old_speed = self.speed
         self.speed = min(speedCollision, self.speed + delta*ACCELERATION) #MAX_SPEED*(0.5*self.phaseVirage+0.5),
 
-        self.path_color = self.color_cs.color2()
+        self.path_color = self.color_cs.color3()
 
         if(self.path_color==Color.WHITE):
             self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)
@@ -62,7 +61,7 @@ class PathFinding :
         old_speed = self.speed
         self.speed = min(speedCollision, self.speed + delta*ACCELERATION) #MAX_SPEED*(0.5*self.phaseVirage+0.5),
 
-        self.path_color = self.color_cs.color2()
+        self.path_color = self.color_cs.color3()
 
         if(self.path_color==Color.WHITE):
             self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)

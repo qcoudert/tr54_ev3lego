@@ -11,20 +11,33 @@ class CSensor:
         self.sensor = ColorSensor(Port.S3)
 
         self.colorTab = []
+        self.colorTab2 = []
+
+        self.colorTab.append((0,0,0,0, Color.BLACK))
+        self.colorTab.append((1,30,30,30, Color.BLACK))
+
+        self.colorTab.append((0,51,60,80, Color.WHITE))
+        self.colorTab.append((1,100,100,100, Color.WHITE))
+
         self.colorTab.append((0,55,0,3, Color.RED))
         self.colorTab.append((1,80,20,7, Color.RED))
 
         self.colorTab.append((0,30,55,20, Color.GREEN))
         self.colorTab.append((1,36,62,23, Color.GREEN))
 
-        self.colorTab.append((0,0,0,50, Color.BLUE))
-        self.colorTab.append((1,20,20,100, Color.BLUE))
+        self.colorTab.append((0,7,30,63, Color.BLUE))
+        self.colorTab.append((1,10,33,67, Color.BLUE))
+# ---------------------
+        self.colorTab2.append((1,1,40, Color.BLACK))
 
-        self.colorTab.append((0,0,0,0, Color.BLACK))
-        self.colorTab.append((1,10,10,10, Color.BLACK))
+        self.colorTab2.append((1.2,1.6,100, Color.WHITE))
 
-        self.colorTab.append((0,51,60,80, Color.WHITE))
-        self.colorTab.append((1,100,100,100, Color.WHITE))
+        self.colorTab2.append((0.25,0.1,80, Color.RED))
+
+        self.colorTab2.append((2,0.66,60, Color.GREEN))
+
+        self.colorTab2.append((3,6.5,70, Color.BLUE))
+
 
     def color(self):
         return self.sensor.color()
@@ -40,6 +53,23 @@ class CSensor:
                     test = False
             if(test == True):
                 return self.colorTab[i*2][4]
+        return None
+
+    def color3(self):
+        color = self.sensor.rgb()
+        color_type = None
+        for i in range (0, len(self.colorTab2)) :
+            test = True
+            if(color[0] > self.colorTab2[i][2] or color[1] > self.colorTab2[i][2] or color[2] > self.colorTab2[i][2]):
+                test = False
+            for j in range (0,2) :
+                if(color[1+j] * self.colorTab2[i][j]  < color[0] - self.colorTab2[i][j] * self.colorTab2[i][2]/10 or 
+                color[1+j] * self.colorTab2[i][j]  > color[0] + self.colorTab2[i][j] * self.colorTab2[i][2]/10):
+                    test = False
+            if(test == True):   
+                print(self.colorTab2[i][3])
+                return self.colorTab2[i][3]
+        print("None")
         return None
 
     def rgb(self):
