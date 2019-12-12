@@ -1,6 +1,7 @@
 from pybricks.ev3devices import ColorSensor
 from pybricks.parameters import (Port, Color)
-from pybricks.tools import print
+from pybricks.tools import print, wait
+
 
 
 
@@ -9,6 +10,8 @@ class CSensor:
 
     def __init__(self):
         self.sensor = ColorSensor(Port.S3)
+
+        self.dominantColorTab = []
 
         self.colorTab = []
         self.colorTab.append((0,90,0,0, Color.RED))
@@ -151,3 +154,37 @@ class CSensor:
             return Color.WHITE
         else:
             return None
+
+    def dominantColor4(self):
+        rgb = self.rgb()
+        #print(rgb)
+        #TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 255, 0), "BLUE": (0, 0, 255), "BLACK": (0, 0, 0), "WHITE": (255, 255, 255)}
+        TARGET_COLORS = {"RED": (180, 40, 30, 109), "GREEN": (97, 103, 67, 85), "BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
+        rgb_list = list(rgb)
+        hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
+        rgb_list.append(hsl_color[1])
+        my_color = tuple(rgb_list)
+        #print(my_color)
+        differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
+        differences.sort() 
+        my_color_name = differences[0][1]
+        #print(hsl_color)
+        print(my_color_name)
+        return my_color_name
+
+
+    
+
+    def dominantSortingColor(self):
+        my_color = self.dominantColor4()
+        wait(10)
+        self.dominantColorTab.append(my_color)
+        if(len(self.dominantColorTab) == 10):
+            setlist = set(sorted(self.dominantColorTab))
+            b = [self.dominantColorTab.count(el) for el in setlist]
+            pos = b.index(max(b))
+            new_list = list(setlist)
+            self.dominantColorTab.clear()
+            return new_list[pos]
+        else:
+            return "N/A"

@@ -24,7 +24,15 @@ colorS = color_sensor.CSensor()
 
 
 while(1):
-    brick.display.text(colorS.dominantColor3())
+    h = colorS.dominantSortingColor()
+    if(h != "N/A"):
+        #print(h)
+        brick.display.text(h)
+    
+        
+    
+    """if(colorS.dominantColor4() == "GREEN"):
+        brick.sound.beep(100, 200)"""
     """if(colorS.dominantColor(rgbColor) == "RED"):
         if(dp.canPass()):
             while(1):
