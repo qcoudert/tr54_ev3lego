@@ -127,18 +127,27 @@ class CSensor:
 
     def dominantColor3(self):
         rgb = self.rgb()
-        print(rgb)
+        #print(rgb)
         #TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 215, 0), "BLUE": (0, 0, 255), "BLACK": (0, 0, 0), "WHITE": (255, 255, 255)}
-        TARGET_COLORS = {"RED": (134, 35, 10), "GREEN": (115, 175, 67), "BLUE": (17, 57, 150), "BLACK": (7, 15, 1), "WHITE": (120, 137, 210), "BLACK2": (45, 83, 18), "BLACK3": (66, 116, 72)}
-        my_color = tuple(rgb)
+        TARGET_COLORS = {"RED": (180, 40, 30, 109), "GREEN": (97, 103, 67, 85), "BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
+        rgb_list = list(rgb)
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
+        rgb_list.append(hsl_color[1])
+        my_color = tuple(rgb_list)
+        print(my_color)
         differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
         differences.sort() 
         my_color_name = differences[0][1]
-        print(hsl_color)
-        if(my_color_name == "BLACK" and hsl_color[1]>30):
-            return "GREEN"
-        else if(my_color_name == "BLACK" and hsl_color[1]<30):
-            return "BLACK"
+        #print(hsl_color)
+        if(my_color_name == "BLUE"):
+            return Color.BLUE
+        elif(my_color_name == "GREEN"):
+            return Color.GREEN
+        elif(my_color_name == "RED"):
+            return Color.RED
+        elif(my_color_name == "BLACK"):
+            return Color.BLACK
+        elif(my_color_name == "WHITE"):
+            return Color.WHITE
         else:
-            return(my_color_name)
+            return None
