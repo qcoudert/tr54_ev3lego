@@ -11,6 +11,8 @@ import sys, brick_SL
 import pilot, color_sensor, robot_status, lcd_display, network
 import os, time
 
+SECURITY_DISTANCE = 100                         #Distance to travel from the beginning of the way to the end of the intersection
+
 class DPassage:
     def __init__(self, ip):
         self.isAllowedToPass = False
@@ -23,9 +25,9 @@ class DPassage:
     def stateInWay(self, state):
         if(state == "GREEN"):
             self.serv_sender.sendMessage("GREEN "+ self.ip + " " + str(time.time()))
-        if(state == "ORANGE"):
+        elif(state == "ORANGE"):
             self.serv_sender.sendMessage("RED "+ self.ip + " " + str(time.time()))
-        if(state == "OOC"):
+        elif(state == "OOC"):
             self.serv_sender.sendMessage("OOC "+ self.ip + " " + str(time.time()))
     
     #The server give or not the right to pass (return true or false)
@@ -41,9 +43,9 @@ class DPassage:
         return self.isAllowedToPass
 
     #Return true if the robot has passed the intersection and send it to the server
-    def hasPassed(self, distReached, securityDistance):
+    def hasPassed(self, distReached):
         #distReached = Distance the robot reached since he started to pass through the conflict zone
-        if(distReached >= securityDistance and self.isAllowedToPass == True):
+        if(distReached >= SECURITY_DISTANCE and self.isAllowedToPass == True):
             self.isAllowedToPass = False
             #send that the robot has passed to delete it in the way list on the server
             self.serv_sender.sendMessage(self.ip + " " + "GREEN " + "Passed")
