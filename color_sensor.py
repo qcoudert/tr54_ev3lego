@@ -171,7 +171,7 @@ class CSensor:
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
         rgb_list.append(hsl_color[1])
         my_color = tuple(rgb_list)
-        print(my_color)
+        #print(my_color)
         differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
         differences.sort() 
         my_color_name = differences[0][1]

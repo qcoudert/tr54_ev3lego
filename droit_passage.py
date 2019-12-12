@@ -48,7 +48,7 @@ class DPassage:
         if(distReached >= SECURITY_DISTANCE and self.isAllowedToPass == True):
             self.isAllowedToPass = False
             #send that the robot has passed to delete it in the way list on the server
-            self.serv_sender.sendMessage(self.ip + " " + "GREEN " + "Passed")
+            self.serv_sender.sendMessage("OOC " + self.ip)
             return True
         else:
             return False

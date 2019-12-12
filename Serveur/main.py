@@ -28,7 +28,7 @@ while (1):
         #Si le robot n'est plus dans la zone d'entrée/conflit alors on le supprime des listes de passage
         elif (msg[0]== "OOC"):
             utils.deleteColumnContainingIP(greenWay, msg[1])
-            utils.deleteColumnContainingIP(orangeIsRunning, msg[1])
+            utils.deleteColumnContainingIP(orangeWay, msg[1])
 
     print(greenWay)
     print(orangeWay)

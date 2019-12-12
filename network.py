@@ -24,6 +24,7 @@ class NetworkListener(Thread):
         
         #Try to get the data
         data = None
+        addr = None
         try:
             data, addr = self.sock.recvfrom(1024)
         except OSError as err:
@@ -71,10 +72,6 @@ class MessageSender:
 
     def sendMessage(self, message):
         """Broadcast a string message with the provided socket"""
-        
-        print('--------------')
-        print('Sending message to broadcast address: ' + self.broadAddr)
-        print('--------------')
 
         try:
             self.sock.sendto(message.encode('utf-8'), (self.broadAddr, 37020))
