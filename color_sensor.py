@@ -166,8 +166,6 @@ class CSensor:
         return my_color_name
 
 
-    
-
     def dominantSortingColor(self):
         my_color = self.dominantColor4()
         wait(10)
@@ -181,3 +179,19 @@ class CSensor:
             return new_list[pos]
         else:
             return "N/A"
+
+    def dominantSortingColor2(self):
+        my_color = self.dominantColor4()
+        wait(10)
+        self.dominantColorTab.append(my_color)
+        SWITCHER_COLOR = {"RED": Color.RED, "GREEN": Color.GREEN, "BLUE": Color.BLUE, "BLACK": Color.BLACK, "WHITE": Color.WHITE}
+        if(len(self.dominantColorTab) == 10):
+            setlist = set(sorted(self.dominantColorTab))
+            b = [self.dominantColorTab.count(el) for el in setlist]
+            pos = b.index(max(b))
+            new_list = list(setlist)
+            self.dominantColorTab.clear()
+            return SWITCHER_COLOR.get(new_list[pos], -1)
+        else:
+            return "N/A"
+

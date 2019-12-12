@@ -24,7 +24,7 @@ colorS = color_sensor.CSensor()
 
 
 while(1):
-    h = colorS.dominantSortingColor()
+    h = colorS.dominantSortingColor2()
     if(h != "N/A"):
         #print(h)
         brick.display.text(h)
