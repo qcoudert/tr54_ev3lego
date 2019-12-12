@@ -11,16 +11,19 @@ class CSensor:
         self.sensor = ColorSensor(Port.S3)
 
         self.colorTab = []
-        self.colorTab.append((0,90,0,0, Color.RED))
-        self.colorTab.append((1,100,10,10, Color.RED))
+        self.colorTab.append((0,55,0,3, Color.RED))
+        self.colorTab.append((1,80,20,7, Color.RED))
 
-        self.colorTab.append((0,0,90,0, Color.GREEN))
-        self.colorTab.append((1,10,100,10, Color.GREEN))
+        self.colorTab.append((0,30,55,20, Color.GREEN))
+        self.colorTab.append((1,36,62,23, Color.GREEN))
+
+        self.colorTab.append((0,0,0,50, Color.BLUE))
+        self.colorTab.append((1,20,20,100, Color.BLUE))
 
         self.colorTab.append((0,0,0,0, Color.BLACK))
-        self.colorTab.append((1,40,40,40, Color.BLACK))
+        self.colorTab.append((1,10,10,10, Color.BLACK))
 
-        self.colorTab.append((1,60,60,60, Color.WHITE))
+        self.colorTab.append((0,51,60,80, Color.WHITE))
         self.colorTab.append((1,100,100,100, Color.WHITE))
 
     def color(self):
@@ -28,6 +31,7 @@ class CSensor:
 
     def color2(self):
         color = self.sensor.rgb()
+        print(color)
         color_type = None
         for i in range (0, len(self.colorTab)/2) :
             test = True
@@ -35,9 +39,8 @@ class CSensor:
                 if(color[j] < self.colorTab[i*2][j+1] or color[j] > self.colorTab[i*2+1][j+1] ):
                     test = False
             if(test == True):
-                color_type = self.colorTab[i*2][5]
-                break
-        return color_type
+                return self.colorTab[i*2][4]
+        return None
 
     def rgb(self):
         return self.sensor.rgb()
@@ -71,9 +74,9 @@ class CSensor:
         elif(rgb[1] > rgb[0] and rgb[1] > rgb[2]):
             return Color.GREEN
         elif(rgb[0] > rgb[1] and rgb[0] > rgb[2]):
-               return Color.RED
+            return Color.RED
         elif(rgb[2] > rgb[1] and rgb[2] > rgb[0]):
-               return Color.BLUE
+            return Color.BLUE
 
     def dominantColor(self, rgb):
         if(rgb[0] <30 and rgb[1] < 30 and rgb[2] <30):
@@ -122,7 +125,7 @@ class CSensor:
 
     def dominantColor3(self):
         rgb = self.rgb()
-        TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 255, 0), "BLUE": (0, 0, 255), "WHITE": (255, 255, 255)}
+        TARGET_COLORS = {Color.RED: (255, 0, 0), Color.GREEN: (0, 255, 0), Color.BLUE: (0, 0, 255), Color.WHITE: (255, 255, 255)}
 
         my_color = tuple(rgb)
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
@@ -131,8 +134,8 @@ class CSensor:
         my_color_name = differences[0][1]
         print(hsl_color)
         if(hsl_color[1]<10):
-            return "BLACK"
+            return Color.BLACK
         elif(hsl_color[1]>60):
-            return "WHITE" 
+            return Color.WHITE
         else:
             return(my_color_name)

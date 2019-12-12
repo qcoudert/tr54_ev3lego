@@ -61,7 +61,6 @@ class DistanceTracker:
             timeElpased = tp.timeEnd - tp.timeBegin
             totaltime += timeElpased
             totaldist += (tp.speed * 0.0277) * timeElpased
-            print("TP: " + str(timeElpased) + "s at " + str(tp.speed) + "for a total of " + str(totaldist))
         
         self.log.pop()              #The non complete TimedPosition is deleted from the array
 
