@@ -19,12 +19,11 @@ print(sys.version_info)
 
 dp= droit_passage.DPassage("192.168.137.147")
 colorS = color_sensor.CSensor()
-pilote = pilot.Pilot()
+#pilote = pilot.Pilot()
 
 
 
 while(1):
-    rgbColor = colorS.rgb()
     brick.display.text(colorS.dominantColor3())
     """if(colorS.dominantColor(rgbColor) == "RED"):
         if(dp.canPass()):
@@ -40,4 +39,4 @@ while(1):
         dp.canPass()
         dp.stateInWay("OOC")
 
-    wait(1000)
+    wait(1000)"""
