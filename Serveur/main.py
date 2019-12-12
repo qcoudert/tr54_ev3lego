@@ -7,8 +7,8 @@ listener.start()
 sender = MessageSender()
 print(listener.ip)
 
-greenWay = [[],[]]
-orangeWay = [[],[]]
+greenWay = [[],[]]              #[[IP du véhicule sur la voie verte],[Heure d'entrée sur la voie verte]]
+orangeWay = [[],[]]             #[[IP du véhicule sur la voie orange],[Heure d'entrée sur la voie orange]]
 isRunning = False
 greenIsRunning = False
 orangeIsRunning = False
@@ -36,49 +36,37 @@ while (1):
     #Si on est en cours de traitement
     if(isRunning == True):
         if(greenIsRunning == True):
-            for elt in greenWay[0]:
-                sender.sendMessage(elt + " " + "YES")
-            #Une fois que tous les robots de liste vertes sont passés alors la liste est vide et on peut faire passer ceux de la liste orange
-            if(not greenWay):
-                greenIsRunning = False
-                orangeIsRunning = True
-                
-        if(orangeIsRunning == True):
-            for elt in orangeWay[0]:
-                sender.sendMessage(elt + " " + "YES")
-            #Une fois que tous les robots de liste vertes sont passés alors la liste est vide et on peut faire passer ceux de la liste orange
-            if(not orangeWay):
-                orangeIsRunning = False
-                greenIsRunning = True 
-
-        #Si les deux listes sont vides alors il n'y a plus de robots dans les zones d'entrées/conflits > on recommence le processus comme au départ
-        if(not orangeWay and not greenWay):
-            isRunning == False
+            if(greenWay[0]):
+                for elt in greenWay[0]:
+                    sender.sendMessage(elt + " " + "YES")
             greenIsRunning = False
+            isRunning = False
+        elif(orangeIsRunning == True):
+            if(orangeWay[0]):
+                for elt in orangeWay[0]:
+                    sender.sendMessage(elt + " " + "YES")
             orangeIsRunning = False
-
+            isRunning = False
+        else:
+            isRunning = False
 
     #Si on est pas déjà en cours de traitement
     if (isRunning == False):
         #On compare les liste pour savoir quelle voie est prioritaire (celle qui a eu le premier véhicule arrivé est prioritaire)
-        #Vert prioritaire
         if(greenWay[1] and orangeWay[1]):
+            #Vert prioritaire
             if (greenWay[1][0] < orangeWay[1][0] ):
                 isRunning = True
                 greenIsRunning = True
             #Orange prioritaire
-            elif ( greenWay[1][0] > orangeWay[1][0] ):
+            elif ( greenWay[1][0] >= orangeWay[1][0] ):
                 isRunning = True
                 orangeIsRunning = True
-            #Si les temps sont égaux alors ont choisit arbitrairement l'orange comme voie prioritaire
-            else:
-                isRunning = True
-                orangeIsRunning = True
-        elif(not(greenWay) and not(orangeWay)):
+        elif(not(greenWay[0]) and not(orangeWay[0])):
             isRunning=False
             orangeIsRunning=False
             greenIsRunning=False
-        elif(not(greenWay)):
+        elif(not(greenWay[0])):
             isRunning=True
             orangeIsRunning=True
         else:

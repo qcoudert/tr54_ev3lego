@@ -1,5 +1,7 @@
 #!/usr/bin/env pybricks-micropython
 
+# /Mains_Pathfinding/main_pathfinding_time.py
+
 # some_file.py
 import sys
 # insert at 1, 0 is the script path (or '' in REPL)
@@ -21,11 +23,12 @@ m_distance_tracker = robot_status.DistanceTracker(m_path_finding.pilote)
 keepGoing = True
 intersection = False
 old = time.time()
+
 while(1):
     delta = time.time() - old 
     old = time.time()
-
     if(m_path_finding.path_color == Color.RED or m_path_finding.path_color == Color.GREEN):
+        brick.sound.beep(200, 100)
         keepGoing = False
         intersection = True
     
