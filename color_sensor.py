@@ -165,8 +165,8 @@ class CSensor:
         rgb = self.rgb()
         #print(rgb)
         #TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 215, 0), "BLUE": (0, 0, 255), "BLACK": (0, 0, 0), "WHITE": (255, 255, 255)}
-        TARGET_COLORS = {"RED": (180, 40, 30, 109), "GREEN": (97, 103, 67, 85), "BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
-        SWITCHER_COLOR = {"RED": Color.RED, "GREEN": Color.GREEN, "BLUE": Color.BLUE, "BLACK": Color.BLACK, "WHITE": Color.WHITE}
+        TARGET_COLORS = {"BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
+        SWITCHER_COLOR = {"BLUE": Color.BLUE, "BLACK": Color.BLACK, "WHITE": Color.WHITE}
         rgb_list = list(rgb)
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
         rgb_list.append(hsl_color[1])
@@ -189,7 +189,9 @@ class CSensor:
         my_color = tuple(rgb_list)
         print(my_color)
         differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
+        print(differences)
         differences.sort() 
+        print(differences)
         my_color_name = differences[0][1]
         #print(hsl_color)
         print(my_color_name)
@@ -198,9 +200,9 @@ class CSensor:
 
     def dominantSortingColor(self):
         my_color = self.dominantColor4()
-        wait(10)
+        wait(15)
         self.dominantColorTab.append(my_color)
-        if(len(self.dominantColorTab) == 10):
+        if(len(self.dominantColorTab) == 20):
             setlist = set(sorted(self.dominantColorTab))
             b = [self.dominantColorTab.count(el) for el in setlist]
             pos = b.index(max(b))
@@ -215,7 +217,7 @@ class CSensor:
         wait(10)
         self.dominantColorTab.append(my_color)
         SWITCHER_COLOR = {"RED": Color.RED, "GREEN": Color.GREEN, "BLUE": Color.BLUE, "BLACK": Color.BLACK, "WHITE": Color.WHITE}
-        if(len(self.dominantColorTab) == 10):
+        if(len(self.dominantColorTab) == 5):
             setlist = set(sorted(self.dominantColorTab))
             b = [self.dominantColorTab.count(el) for el in setlist]
             pos = b.index(max(b))

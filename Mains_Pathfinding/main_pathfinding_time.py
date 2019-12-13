@@ -27,7 +27,7 @@ old = time.time()
 while(1):
     delta = time.time() - old 
     old = time.time()
-    if(m_path_finding.path_color == Color.RED or m_path_finding.path_color == Color.GREEN):
+    if(m_path_finding.path_color_trigger == Color.RED and keepGoing or m_path_finding.path_color_trigger == Color.GREEN and keepGoing):
         brick.sound.beep(200, 100)
         keepGoing = False
         intersection = True

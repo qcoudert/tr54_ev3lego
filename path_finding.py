@@ -15,6 +15,7 @@ class PathFinding :
         self.phaseVirage = 1
         self.vitesse = 0
         self.path_color = None
+        self.path_color_trigger = None
         self.phase = None
         self.speed = 0
         self.pilote = pilot.Pilot()
@@ -32,6 +33,7 @@ class PathFinding :
         self.speed = min(speedCollision, self.speed + delta*ACCELERATION) #MAX_SPEED*(0.5*self.phaseVirage+0.5),
 
         self.path_color = self.color_cs.dominantColor3()
+        self.path_color_trigger = self.color_cs.dominantSortingColor2()
 
         if(self.path_color==Color.WHITE):
             self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)
@@ -62,6 +64,7 @@ class PathFinding :
         self.speed = min(speedCollision, self.speed + delta*ACCELERATION) #MAX_SPEED*(0.5*self.phaseVirage+0.5),
 
         self.path_color = self.color_cs.dominantColor3()
+        self.path_color_trigger = self.color_cs.dominantSortingColor2()
 
         if(self.path_color==Color.WHITE):
             self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)
