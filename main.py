@@ -18,7 +18,7 @@ print(sys.version_info)
 
 SWITCHER_WAY = {Color.RED: "ORANGE", Color.GREEN: "GREEN"}    #SWITCHER to get way from Color
 
-dp= droit_passage.DPassage("192.168.43.178")                    #CHANGER L'IP AVANT LE LANCEMENT DU ROBOT
+dp= droit_passage.DPassage("192.168.137.57")                    #CHANGER L'IP AVANT LE LANCEMENT DU ROBOT
 colorS = color_sensor.CSensor()                                 #Initialize the color sensor
 
 m_path_finding = path_finding.PathFinding()
@@ -39,7 +39,7 @@ while(1):
         keepGoing = False                                               #The robot don't have the permission to cross
         intersection = True                                             #The robot is in an intersection
         currentWay = SWITCHER_WAY.get(path_color)                       #Current way the robot is
-        m_distance_tracker.log = []                                     #Clear the distance tracker cache
+        m_distance_tracker.flush()                                     #Clear the distance tracker cache
         brick.display.text("COMING INTO " + currentWay)
     
     #Pas dans l'intersection et peut avancer

@@ -38,6 +38,11 @@ class DistanceTracker:
         self.timeBegin = time.time()
         self.log = []
 
+    def flush(self):
+        self.lastRegisteredSpeed = self.pilot.speed
+        self.timeBegin = time.time()
+        self.log = []
+
     def update(self):
         if(self.lastRegisteredSpeed!= self.pilot.speed * self.pilot.dist_proportion):
             self.timeEnd = time.time()
