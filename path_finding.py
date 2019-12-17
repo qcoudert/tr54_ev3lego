@@ -41,6 +41,8 @@ class PathFinding :
             self.pilote.forwardRelative(self.speed)
         elif(self.path_color==Color.BLACK):
             self.pilote.forwardTurn2(self.speed, -ANGLE_MAX + (ANGLE_MAX-ANGLE_MIN) * self.phaseVirage * self.phaseVirage)
+        elif(self.path_color_trigger==Color.GREEN):
+            self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)
 
         """
         if(self.path_color==Color.WHITE):
@@ -72,6 +74,8 @@ class PathFinding :
             self.pilote.forwardRelative(self.speed)
         elif(self.path_color==Color.BLACK):
             self.pilote.forwardTurn2(self.speed, -ANGLE_MAX + (ANGLE_MAX-ANGLE_MIN) * self.phaseVirage * self.phaseVirage)
+        elif(self.path_color_trigger==Color.GREEN):
+            self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)
 
         """
         if(self.path_color==Color.WHITE):

@@ -190,19 +190,19 @@ class CSensor:
         rgb = self.rgb()
         #print(rgb)
         #TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 215, 0), "BLUE": (0, 0, 255), "BLACK": (0, 0, 0), "WHITE": (255, 255, 255)}
-        TARGET_COLORS = {"RED": (180, 40, 30, 109), "GREEN": (97, 103, 67, 85), "BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
+        TARGET_COLORS = {"RED": (180, 40, 30, 109), "GREEN": (92, 154, 50, 102), "BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
         rgb_list = list(rgb)
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
         rgb_list.append(hsl_color[1])
         my_color = tuple(rgb_list)
-        #print(my_color)
+        print(my_color)
         differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
         #print(differences)
         differences.sort() 
         #print(differences)
         my_color_name = differences[0][1]
-        #print(hsl_color)
-        #print(my_color_name)
+        print(hsl_color)
+        print(my_color_name)
         return my_color_name
 
 
@@ -210,7 +210,7 @@ class CSensor:
         my_color = self.dominantColor4()
         wait(15)
         self.dominantColorTab.append(my_color)
-        if(len(self.dominantColorTab) == 20):
+        if(len(self.dominantColorTab) == 5):
             setlist = set(sorted(self.dominantColorTab))
             b = [self.dominantColorTab.count(el) for el in setlist]
             pos = b.index(max(b))
@@ -222,7 +222,6 @@ class CSensor:
 
     def dominantSortingColor2(self):
         my_color = self.dominantColor4()
-        wait(10)
         self.dominantColorTab.append(my_color)
         SWITCHER_COLOR = {"RED": Color.RED, "GREEN": Color.GREEN, "BLUE": Color.BLUE, "BLACK": Color.BLACK, "WHITE": Color.WHITE}
         if(len(self.dominantColorTab) == 5):
@@ -231,8 +230,10 @@ class CSensor:
             pos = b.index(max(b))
             new_list = list(setlist)
             self.dominantColorTab.clear()
+            wait(10)
             return SWITCHER_COLOR.get(new_list[pos], -1)
         else:
+            wait(10)
             return "N/A"
     
 
@@ -247,10 +248,10 @@ class CSensor:
         self.logColors[1].append(t)
 
     def greenColorProbability(self):
-        return float(self.logColors.count(Color.GREEN))/float(self.logColors.len())
+        return float(self.logColors.count(Color.GREEN))/float(len(self.logColors))
 
     def redColorProbability(self):
-        return float(self.logColors.count(Color.RED))/float(self.logColors.len())
+        return float(self.logColors.count(Color.RED))/float(len(self.logColors))
 
     def isRedOrGreen(self):
         c = self.sensor.color()
