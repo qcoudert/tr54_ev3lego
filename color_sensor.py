@@ -236,7 +236,7 @@ class CSensor:
     def updateColorProbability(self):
         c = self.sensor.color()
         t = time.time()
-        while(self.logColors && (t-self.logColors[1][0])>COLOR_PROBABILITY_TIME_LIMIT):
+        while(self.logColors and (t-self.logColors[1][0])>COLOR_PROBABILITY_TIME_LIMIT):
             self.logColors[0][0]
             self.logColors[1][0]
         
@@ -251,9 +251,9 @@ class CSensor:
 
     def isRedOrGreen(self):
         c = self.sensor.color()
-        if(c == Color.GREEN && self.greenColorProbability()>COLOR_GREEN_PROBA_THRESH):
+        if(c == Color.GREEN and self.greenColorProbability()>COLOR_GREEN_PROBA_THRESH):
             return Color.GREEN
-        elif(c = Color.RED && self.redColorProbability()>COLOR_RED_PROBA_THRESH):
+        elif(c = Color.RED and self.redColorProbability()>COLOR_RED_PROBA_THRESH):
             return Color.RED
         else:
             return None
