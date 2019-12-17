@@ -44,7 +44,7 @@ class CSensor:
         self.colorTab2.append((3,6.5,70, Color.BLUE))
 
         #-- TEST PROBABILITY COLOR --#
-        self.logColors = []
+        self.logColors = [[],[]]
 
 
     def color(self):
@@ -192,14 +192,14 @@ class CSensor:
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
         rgb_list.append(hsl_color[1])
         my_color = tuple(rgb_list)
-        print(my_color)
+        #print(my_color)
         differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
-        print(differences)
+        #print(differences)
         differences.sort() 
-        print(differences)
+        #print(differences)
         my_color_name = differences[0][1]
         #print(hsl_color)
-        print(my_color_name)
+        #print(my_color_name)
         return my_color_name
 
 
@@ -236,7 +236,7 @@ class CSensor:
     def updateColorProbability(self):
         c = self.sensor.color()
         t = time.time()
-        while(self.logColors and (t-self.logColors[1][0])>COLOR_PROBABILITY_TIME_LIMIT):
+        while(self.logColors[0] and (t-self.logColors[1][0])>COLOR_PROBABILITY_TIME_LIMIT):
             self.logColors[0][0]
             self.logColors[1][0]
         
@@ -253,7 +253,7 @@ class CSensor:
         c = self.sensor.color()
         if(c == Color.GREEN and self.greenColorProbability()>COLOR_GREEN_PROBA_THRESH):
             return Color.GREEN
-        elif(c = Color.RED and self.redColorProbability()>COLOR_RED_PROBA_THRESH):
+        elif(c == Color.RED and self.redColorProbability()>COLOR_RED_PROBA_THRESH):
             return Color.RED
         else:
             return None
