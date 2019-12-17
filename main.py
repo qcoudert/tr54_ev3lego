@@ -32,8 +32,8 @@ old = time.time()
 while(1):
     delta = time.time() - old 
     old = time.time()
-    colorS.updateColorProbability()
-    path_color = colorS.isRedOrGreen()
+    #colorS.updateColorProbability()
+    path_color = colorS.dominantSortingColor()
 
     if(currentWay == "OOC" and (path_color == Color.RED or path_color == Color.GREEN)):
         keepGoing = False                                               #The robot don't have the permission to cross

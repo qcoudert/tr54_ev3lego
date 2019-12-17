@@ -31,12 +31,13 @@ class NetworkListener(Thread):
             print("OSError: {0}".format(err))
         
         #Get address from bytes
-        addr = str(ipaddress.IPv4Address(addr[4:8]))
-        print('----------------')
-        print('Received message')
-        print(self.ip)
-        print(addr)
-        print('----------------')
+        if(addr):
+            addr = str(ipaddress.IPv4Address(addr[4:8]))
+            print('----------------')
+            print('Received message')
+            print(self.ip)
+            print(addr)
+            print('----------------')
 
         #If the address from receiver is different from sender then we store the message
         if((data!=None) and (addr != self.ip)):
