@@ -32,11 +32,13 @@ old = time.time()
 while(1):
     delta = time.time() - old 
     old = time.time()
+    colorS.updateColorProbability()
+    path_color = colorS.isRedOrGreen()
 
-    if(currentWay == "OOC" and (m_path_finding.path_color == Color.RED or m_path_finding.path_color == Color.GREEN)):
+    if(currentWay == "OOC" and (path_color == Color.RED or path_color == Color.GREEN)):
         keepGoing = False                                               #The robot don't have the permission to cross
         intersection = True                                             #The robot is in an intersection
-        currentWay = SWITCHER_WAY.get(m_path_finding.path_color)        #Current way the robot is
+        currentWay = SWITCHER_WAY.get(path_color)                       #Current way the robot is
         m_distance_tracker.log = []                                     #Clear the distance tracker cache
         brick.display.text("COMING INTO " + currentWay)
     

@@ -3,10 +3,10 @@ from pybricks.parameters import Color
 import droit_passage
 
 ACCELERATION = 20
-MAX_SPEED = 70
-ANGLE_MAX = 70
-ANGLE_MIN = 30
-TURNING_TIME_MAX = 2
+MAX_SPEED = 60
+ANGLE_MAX = 60
+ANGLE_MIN = 40
+TURNING_TIME_MAX = 1.5
 DISTANCE_INTERSECTION = 45 
 
 class PathFinding :

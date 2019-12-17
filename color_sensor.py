@@ -2,8 +2,9 @@ from pybricks.ev3devices import ColorSensor
 from pybricks.parameters import (Port, Color)
 from pybricks.tools import print, wait
 
-
-
+COLOR_PROBABILITY_TIME_LIMIT = 3
+COLOR_GREEN_PROBA_THRESH = 0.6
+COLOR_RED_PROBA_THRESH = 0.6
 
 class CSensor:
     
@@ -41,6 +42,8 @@ class CSensor:
 
         self.colorTab2.append((3,6.5,70, Color.BLUE))
 
+#----------------------
+        self.logColors = []
 
     def color(self):
         return self.sensor.color()
@@ -224,4 +227,28 @@ class CSensor:
             return SWITCHER_COLOR.get(new_list[pos], -1)
         else:
             return "N/A"
+
+    def updateColorProbability(self):
+        c = self.dominantColor3()
+        
+        while(self.logColors and (len(self.logColors)>COLOR_PROBABILITY_TIME_LIMIT)):
+            self.logColors.pop(0)
+        
+        self.logColors.append(c)
+
+    def greenColorProbability(self):
+        return float(self.logColors.count(Color.GREEN))/float(len(self.logColors))
+
+    def redColorProbability(self):
+        return float(self.logColors.count(Color.RED))/float(len(self.logColors))
+
+    def isRedOrGreen(self):
+        c = self.dominantColor3()
+        if(c == Color.GREEN and self.greenColorProbability()>COLOR_GREEN_PROBA_THRESH):
+            return Color.GREEN
+        elif(c == Color.RED and self.redColorProbability()>COLOR_RED_PROBA_THRESH):
+            return Color.RED
+        else:
+            return None
+
 
