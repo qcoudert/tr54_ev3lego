@@ -2,6 +2,11 @@ from pybricks.ev3devices import ColorSensor
 from pybricks.parameters import (Port, Color)
 from pybricks.tools import print, wait
 import time
+import csv
+
+
+
+
 
 COLOR_PROBABILITY_TIME_LIMIT = 1
 COLOR_GREEN_PROBA_THRESH = 0.7
@@ -11,6 +16,7 @@ class CSensor:
     
 
     def __init__(self):
+
         self.sensor = ColorSensor(Port.S3)
 
         self.dominantColorTab = []
@@ -33,16 +39,15 @@ class CSensor:
         self.colorTab.append((0,7,30,63, Color.BLUE))
         self.colorTab.append((1,10,33,67, Color.BLUE))
 # ---------------------
-        self.colorTab2.append((1,1,40, Color.BLACK))
-
-        self.colorTab2.append((1.2,1.6,100, Color.WHITE))
-
-        self.colorTab2.append((0.25,0.1,80, Color.RED))
-
-        self.colorTab2.append((2,0.66,60, Color.GREEN))
-
-        self.colorTab2.append((3,6.5,70, Color.BLUE))
-
+        self.color_data = []
+        with open('color.csv','r') as file:
+            for line in file:
+                line_Str=file.readline()
+                line_Str=line_Str.rstrip('\n')
+                line_Str=line_Str.rstrip('\r')
+                self.color_data.append(line_Str.split(','))
+        
+            
         #-- TEST PROBABILITY COLOR --#
         self.logColors = [[],[]]
 
@@ -65,20 +70,18 @@ class CSensor:
 
     def color3(self):
         color = self.sensor.rgb()
+        print(color)
         color_type = None
-        for i in range (0, len(self.colorTab2)) :
+        for i in range (0, len(self.color_data)/2) :
             test = True
-            if(color[0] > self.colorTab2[i][2] or color[1] > self.colorTab2[i][2] or color[2] > self.colorTab2[i][2]):
-                test = False
-            for j in range (0,2) :
-                if(color[1+j] * self.colorTab2[i][j]  < color[0] - self.colorTab2[i][j] * self.colorTab2[i][2]/10 or 
-                color[1+j] * self.colorTab2[i][j]  > color[0] + self.colorTab2[i][j] * self.colorTab2[i][2]/10):
+            for j in range (0,3) :
+                if(color[j] < self.color_data[i*2][j+2] or color[j] > self.color_data[i*2+1][j+2] ):
                     test = False
-            if(test == True):   
-                print(self.colorTab2[i][3])
-                return self.colorTab2[i][3]
-        print("None")
+            if(test == True):
+                return self.color_data[i*2][1]
         return None
+
+   
 
     def rgb(self):
         rgb = self.sensor.rgb()
