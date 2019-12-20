@@ -33,9 +33,9 @@ class PathFinding :
 
         self.path_color = self.color_cs.dominantColor3()
 
-        if(self.path_color==Color.WHITE):
+        if(self.path_color==Color.WHITE or self.path_color==Color.GREEN or self.path_color==Color.RED):
             self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)
-        elif(self.path_color==Color.BLUE or self.path_color==Color.GREEN or self.path_color==Color.RED):
+        elif(self.path_color==Color.BLUE):
             self.pilote.forwardRelative(self.speed)
         elif(self.path_color==Color.BLACK):
             self.pilote.forwardTurn2(self.speed, -ANGLE_MAX + (ANGLE_MAX-ANGLE_MIN) * self.phaseVirage * self.phaseVirage)
@@ -57,15 +57,17 @@ class PathFinding :
     
 
     def stopIntersection(self, delta, distance):
+        if(distance>45):
+            distance = 45
         speedCollision = self.m_collision_management.collisionSpeed(MAX_SPEED - MAX_SPEED * (distance/DISTANCE_INTERSECTION))
         old_speed = self.speed
         self.speed = min(speedCollision, self.speed + delta*ACCELERATION) #MAX_SPEED*(0.5*self.phaseVirage+0.5),
 
         self.path_color = self.color_cs.dominantColor3()
 
-        if(self.path_color==Color.WHITE):
+        if(self.path_color==Color.WHITE or self.path_color==Color.GREEN or self.path_color==Color.ORANGE):
             self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)
-        elif(self.path_color==Color.BLUE or self.path_color==Color.GREEN or self.path_color==Color.ORANGE):
+        elif(self.path_color==Color.BLUE):
             self.pilote.forwardRelative(self.speed)
         elif(self.path_color==Color.BLACK):
             self.pilote.forwardTurn2(self.speed, -ANGLE_MAX + (ANGLE_MAX-ANGLE_MIN) * self.phaseVirage * self.phaseVirage)
