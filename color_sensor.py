@@ -18,26 +18,9 @@ class CSensor:
     def __init__(self):
 
         self.sensor = ColorSensor(Port.S3)
-
+        #List used for dominantSortingColor
         self.dominantColorTab = []
 
-        self.colorTab = []
-        self.colorTab2 = []
-
-        self.colorTab.append((0,0,0,0, Color.BLACK))
-        self.colorTab.append((1,30,30,30, Color.BLACK))
-
-        self.colorTab.append((0,51,60,80, Color.WHITE))
-        self.colorTab.append((1,100,100,100, Color.WHITE))
-
-        self.colorTab.append((0,55,0,3, Color.RED))
-        self.colorTab.append((1,80,20,7, Color.RED))
-
-        self.colorTab.append((0,30,55,20, Color.GREEN))
-        self.colorTab.append((1,36,62,23, Color.GREEN))
-
-        self.colorTab.append((0,7,30,63, Color.BLUE))
-        self.colorTab.append((1,10,33,67, Color.BLUE))
 # ---------------------
         self.color_data = []
         with open('color.csv','r') as file:
@@ -54,35 +37,8 @@ class CSensor:
 
     def color(self):
         return self.sensor.color()
-
-    def color2(self):
-        color = self.sensor.rgb()
-        print(color)
-        color_type = None
-        for i in range (0, len(self.colorTab)/2) :
-            test = True
-            for j in range (0,3) :
-                if(color[j] < self.colorTab[i*2][j+1] or color[j] > self.colorTab[i*2+1][j+1] ):
-                    test = False
-            if(test == True):
-                return self.colorTab[i*2][4]
-        return None
-
-    def color3(self):
-        color = self.sensor.rgb()
-        print(color)
-        color_type = None
-        for i in range (0, len(self.color_data)/2) :
-            test = True
-            for j in range (0,3) :
-                if(color[j] < self.color_data[i*2][j+2] or color[j] > self.color_data[i*2+1][j+2] ):
-                    test = False
-            if(test == True):
-                return self.color_data[i*2][1]
-        return None
-
    
-
+    #Return the sensor RGB values
     def rgb(self):
         rgb = self.sensor.rgb()
         r = (rgb[0]/100)*255
@@ -90,6 +46,7 @@ class CSensor:
         b = (rgb[2]/100)*255
         return r,g,b
 
+    #Convert RGB values into HSV values
     def hsv(self):
         r, g, b = rgb[0]/255.0, rgb[1]/255.0, rgb[2]/255.0
         mx = max(r, g, b)
@@ -110,36 +67,7 @@ class CSensor:
         v = mx
         return h, s, v
 
-    def dominantColor2(self):
-        rgb = self.rgb()
-        if(rgb[0] <30 and rgb[1] < 30 and rgb[2] <30):
-            return Color.BLACK
-        elif(rgb[0] + rgb[1] + rgb[2] > 510):
-            return Color.WHITE  
-        elif(rgb[1] > rgb[0] and rgb[1] > rgb[2]):
-            return Color.GREEN
-        elif(rgb[0] > rgb[1] and rgb[0] > rgb[2]):
-            return Color.RED
-        elif(rgb[2] > rgb[1] and rgb[2] > rgb[0]):
-            return Color.BLUE
-
-    def dominantColor(self):
-        rgb = self.rgb()
-        if(rgb[0] <30 and rgb[1] < 30 and rgb[2] <30):
-            return "BLACK"
-        elif(rgb[0] + rgb[1] + rgb[2] > 510):
-            return "WHITE"   
-        elif(rgb[1] > rgb[0] and rgb[1] > rgb[2]):
-            return "GREEN"
-        elif(rgb[0] > rgb[1] and rgb[0] > rgb[2]):
-               return "RED"
-        elif(rgb[2] > rgb[1] and rgb[2] > rgb[0]):
-               return "BLUE"
-
-    def color_difference (self, color1, color2):
-        return sum([abs(component1-component2) for component1, component2 in zip(color1, color2)])
-
-
+    #Convert rgb values to hsl values
     def rgb_to_hls(self, r, g, b):
         if (max(r, g, b) == 0):
             maxc = 0.002
@@ -149,7 +77,6 @@ class CSensor:
             minc = 0.001
         else:
             minc = min(r, g, b)
-        # XXX Can optimize (maxc+minc) and (maxc-minc)
         l = (minc+maxc)/2.0
         if minc == maxc:
             return 0.0, l, 0.0
@@ -169,43 +96,43 @@ class CSensor:
         h = (h/6.0) % 1.0
         return h, l, s
 
+ 
+    #Return a list of all the differences of colors in other lists ([diff,diff2,diff3,etc])
+    def color_difference (self, color1, color2):
+        return sum([abs(component1-component2) for component1, component2 in zip(color1, color2)])
+
+
+    #Return the number value of BLUE, BLACK or WHITE > This function is used for following the path
+    #This function compare and take the nearest color
     def dominantColor3(self):
         rgb = self.rgb()
-        #print(rgb)
-        #TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 215, 0), "BLUE": (0, 0, 255), "BLACK": (0, 0, 0), "WHITE": (255, 255, 255)}
+        #Color references
         TARGET_COLORS = {"BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
         SWITCHER_COLOR = {"BLUE": Color.BLUE, "BLACK": Color.BLACK, "WHITE": Color.WHITE}
         rgb_list = list(rgb)
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
         rgb_list.append(hsl_color[1])
         my_color = tuple(rgb_list)
-        #print(my_color)
         differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
         differences.sort() 
         my_color_name = differences[0][1]
-        #print(hsl_color)
         return SWITCHER_COLOR.get(my_color_name, -1)
 
+    #Same function as dominantColor3 but white red and green
     def dominantColor4(self):
         rgb = self.rgb()
-        #print(rgb)
-        #TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 215, 0), "BLUE": (0, 0, 255), "BLACK": (0, 0, 0), "WHITE": (255, 255, 255)}
         TARGET_COLORS = {"RED": (180, 40, 30, 109), "GREEN": (92, 154, 50, 102), "BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
         rgb_list = list(rgb)
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
         rgb_list.append(hsl_color[1])
         my_color = tuple(rgb_list)
-        print(my_color)
         differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
-        #print(differences)
         differences.sort() 
-        #print(differences)
         my_color_name = differences[0][1]
-        print(hsl_color)
-        print(my_color_name)
         return my_color_name
 
 
+    #Use dominantColor4 to take a list of 5 colors and choose the most viewed color in this list
     def dominantSortingColor(self):
         my_color = self.dominantColor4()
         wait(15)
@@ -220,6 +147,7 @@ class CSensor:
         else:
             return "N/A"
 
+    #Same as dominantSortingColor but return the number of the color
     def dominantSortingColor2(self):
         my_color = self.dominantColor4()
         self.dominantColorTab.append(my_color)
