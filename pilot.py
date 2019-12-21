@@ -99,7 +99,11 @@ class Pilot:
         return self
 
     def forwardTurn2(self, speedPercentage, angle):
-        # angle -100 to 100
+        """Make the robot turn in a courbe
+
+        speedPercentage : the speed in percent of the robot
+        angle : (-100 to 100) an relative angle, the more it is high, the more the robot turn"""
+
         self.speed = MAX_SPEED * (speedPercentage/100)
         relativeAngle = (self.speed * angle) / 100
         if(angle<0):
