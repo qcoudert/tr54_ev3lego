@@ -10,15 +10,13 @@ TURNING_TIME_MAX = 1.5
 DISTANCE_INTERSECTION = 45 
 
 class PathFinding :
-    """NEED DOC HERE"""
+    """Pathfinding class used to follow the track"""
     
     def __init__(self):
-        self.phaseTime = 0
-        self.phaseVirage = 1
-        self.vitesse = 0
-        self.path_color = None
-        self.phase = None
-        self.speed = 0
+        self.phaseVirage = 1                #
+        self.path_color = None              # actual color detected
+        self.phase = None                   # last color detected
+        self.speed = 0                      # robot speed
         self.pilote = pilot.Pilot()
         self.color_cs = color_sensor.CSensor()
         self.m_distance_sensor = distance_sensor.DistanceSensor()
