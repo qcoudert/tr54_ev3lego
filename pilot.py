@@ -11,9 +11,9 @@ class Pilot:
     def __init__(self):
         self.speed = 0                      # speed of the robot in deg/s
         self.dist_proportion = 1            # proportion of the speed put in the left motor
-        self.angleSpeed = 0
-        self.turnItRight = 0                
-        self.turnItLeft = 0
+        self.angleSpeed = 0                 # speed to substract to one wheel to make the robot turn
+        self.turnItRight = 0                # determine the current angle speed, the higher it is, the more it turns to the right
+        self.turnItLeft = 0                 # determine the current angle speed, the higher it is, the more it turns to the left
         self.left_motor = Motor(Port.B)
         self.right_motor = Motor(Port.C)
 
