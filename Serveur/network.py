@@ -11,14 +11,14 @@ class NetworkListener(Thread):
     def __init__(self):
         super(NetworkListener, self).__init__()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)        #Creating the socket
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)     #Configuring the socket
-        self.sock.bind(("", 37020))                                         #Bind the socket to listen any message on port 37020
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)                         #Configuring the socket
+        self.sock.bind(("", 37020))                                                             #Bind the socket to listen any message on port 37020
         self.sock.setblocking(0)
         self.sock.settimeout(None)
 
-        self.ip = socket.gethostbyname(socket.gethostname())                #IP of the server
+        self.ip = socket.gethostbyname(socket.gethostname())                                    #IP of the server
 
-        self.mailbox = []                                                   #Array that contains any message listened
+        self.mailbox = []                                                                       #Array that contains any message listened
         
     def __listen(self):
         """Listen any message that comes through port 37020"""
@@ -33,6 +33,7 @@ class NetworkListener(Thread):
             None
 
     def run(self):
+        """Loop used by the listener thread"""
         while(1):
             self.__listen()
 
@@ -53,6 +54,8 @@ class MessageSender:
         self.broadAddr = self.getBroadcastAdd()                                                 #Broadcast Address to use
 
     def getBroadcastAdd(self):
+        """Get the broadcast address from the current IP address"""
+
         i = j = len(self.ip)
         while(self.ip[i-1]!='.'):
             i = i-1
