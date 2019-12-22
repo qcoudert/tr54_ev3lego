@@ -9,9 +9,9 @@ print(listener.ip)
 
 greenWay = [[],[]]              #[[IP du véhicule sur la voie verte],[Heure d'entrée sur la voie verte]]
 orangeWay = [[],[]]             #[[IP du véhicule sur la voie orange],[Heure d'entrée sur la voie orange]]
-isRunning = False
-greenIsRunning = False
-orangeIsRunning = False
+isRunning = False               #Faux si aucune permission n'est actuellement accordée, Vrai si une permission est actuellement accordée à une voie
+greenIsRunning = False          #Faux si les véhicules de la voie verte n'ont pas la permission de passer, vrai sinon
+orangeIsRunning = False         #Faux si les véhicules de la voie verte n'ont pas la permission de passer, vrai sinon
 
 
 while (1):

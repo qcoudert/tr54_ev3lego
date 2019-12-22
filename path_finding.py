@@ -10,6 +10,8 @@ TURNING_TIME_MAX = 1.5
 DISTANCE_INTERSECTION = 45 
 
 class PathFinding :
+    """NEED DOC HERE"""
+    
     def __init__(self):
         self.phaseTime = 0
         self.phaseVirage = 1

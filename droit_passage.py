@@ -1,28 +1,21 @@
-#!/usr/bin/env pybricks-micropython
+import network
+import time
 
-from pybricks import ev3brick as brick
-from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
-                                 InfraredSensor, UltrasonicSensor, GyroSensor)
-from pybricks.parameters import (Port, Stop, Direction, Button, Color,
-                                 SoundFile, ImageFile, Align)
-from pybricks.tools import print, wait, StopWatch
-from pybricks.robotics import DriveBase
-import sys, brick_SL
-import pilot, color_sensor, robot_status, lcd_display, network
-import os, time
-
-SECURITY_DISTANCE = 100                         #Distance to travel from the beginning of the way to the end of the intersection
+SECURITY_DISTANCE = 100                                             #Distance to travel from the beginning of the way to the end of the intersection
 
 class DPassage:
-    def __init__(self, ip):
-        self.isAllowedToPass = False
-        self.ip = ip
-        self.serv_listener = network.NetworkListener(self.ip)
-        self.serv_listener.start()
-        self.serv_sender = network.MessageSender(self.ip)
+    """"""
 
-    #Send the state of the robot to the server 
+    def __init__(self, ip):
+        self.isAllowedToPass = False                                #False if the robot is not allowed to pass the intersection, else True
+        self.ip = ip                                                #IP Address of the robot
+        self.serv_listener = network.NetworkListener(self.ip)       #NetworkListener of the robot used to listen any message from the server
+        self.serv_listener.start()                                  #Starting the NetworkListener
+        self.serv_sender = network.MessageSender(self.ip)           #MessageSender used to send messages to the server
+ 
     def stateInWay(self, state):
+        """Send the current status of the robot to the server"""
+
         if(state == "GREEN"):
             self.serv_sender.sendMessage("GREEN "+ self.ip + " " + str(time.time()))
         elif(state == "ORANGE"):
@@ -30,8 +23,11 @@ class DPassage:
         elif(state == "OOC"):
             self.serv_sender.sendMessage("OOC "+ self.ip + " " + str(time.time()))
     
-    #The server give or not the right to pass (return true or false)
     def canPass(self):
+        """Check if the permission to pass is given by the server
+        
+        Return True if so, else False."""
+
         self.isAllowedToPass = False
         if(self.serv_listener.mailbox):
             #The server return the IP and the message "YES"
@@ -42,13 +38,16 @@ class DPassage:
         
         return self.isAllowedToPass
 
-    #Return true if the robot has passed the intersection and send it to the server
     def hasPassed(self, distReached):
-        #distReached = Distance the robot reached since he started to pass through the conflict zone
+        """Return true if the robot has passed the intersection and send it to the server
+        
+        'distReached': Distance the robot reached since he started to go through the way
+        """
+        
         if(distReached >= SECURITY_DISTANCE and self.isAllowedToPass == True):
             self.isAllowedToPass = False
-            #send that the robot has passed to delete it in the way list on the server
-            self.serv_sender.sendMessage("OOC " + self.ip)
+            self.serv_sender.sendMessage("OOC " + self.ip)      #Send that the robot has passed to delete it in the way list on the server
+            self.serv_listener.mailbox = []                     #Delete any messages avoid storing previous permissions given
             return True
         else:
             return False

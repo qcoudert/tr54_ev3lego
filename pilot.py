@@ -18,6 +18,7 @@ class Pilot:
         self.right_motor = Motor(Port.C)
 
     def forward(self, speed):
+        """Make the robot go forward at 'speed' in deg/s"""
         self.speed = speed
         self.dist_proportion = 1
         self.angleSpeed = 0
@@ -139,7 +140,7 @@ class Pilot:
 
     
     def stop(self):
-        """Make the robot stop mooving by stoping all the motors."""
+        """Make the robot stop moving by stoping all the motors."""
         self.speed = 0
         self.dist_proportion = 1
         self.left_motor.stop()
