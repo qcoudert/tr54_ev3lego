@@ -13,7 +13,7 @@ class PathFinding :
     """Pathfinding class used to follow the track"""
     
     def __init__(self):
-        self.phaseVirage = 1                #
+        self.phaseVirage = 1                # variable which varies between 0 and 1, this variable decrements according to the time spent on a color 
         self.path_color = None              # actual color detected
         self.phase = None                   # last color detected
         self.speed = 0                      # robot speed
