@@ -9,10 +9,10 @@ class Pilot:
     """Pilot class allowing user to drive the robot"""
     
     def __init__(self):
-        self.speed = 0
-        self.dist_proportion = 1
+        self.speed = 0                      # speed of the robot in deg/s
+        self.dist_proportion = 1            # proportion of the speed put in the left motor
         self.angleSpeed = 0
-        self.turnItRight = 0
+        self.turnItRight = 0                
         self.turnItLeft = 0
         self.left_motor = Motor(Port.B)
         self.right_motor = Motor(Port.C)
@@ -100,7 +100,7 @@ class Pilot:
         return self
 
     def forwardTurn2(self, speedPercentage, angle):
-        """Make the robot turn in a courbe
+        """Make the robot turns making a curve
 
         speedPercentage : the speed in percent of the robot
         angle : (-100 to 100) an relative angle, the more it is high, the more the robot turn"""
@@ -125,18 +125,6 @@ class Pilot:
         self.dist_proportion = 1
         self.left_motor.run(self.speed)
         self.right_motor.run(self.speed)
-
-    def rotate(self, angle, aSpeed):
-        self.left_motor.run_target(aSpeed, angle, Stop.BRAKE, False)
-        self.right_motor.run_target(aSpeed, -angle, Stop.BRAKE, True)
-
-    def rotateR(self, speed):
-        s = MAX_SPEED * (speed/100)
-        self.right_motor.run(s)
-
-    def rotateL(self, speed):
-        s = MAX_SPEED * (speed/100)
-        self.left_motor.run(s)
 
     
     def stop(self):
