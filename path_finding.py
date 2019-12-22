@@ -29,7 +29,7 @@ class PathFinding :
 
         speedCollision = self.m_collision_management.collisionSpeed(MAX_SPEED)
         old_speed = self.speed
-        self.speed = min(speedCollision, self.speed + delta*ACCELERATION) #MAX_SPEED*(0.5*self.phaseVirage+0.5),
+        self.speed = min(speedCollision, self.speed + delta*ACCELERATION) 
 
         self.path_color = self.color_cs.dominantColor3()
 
@@ -45,7 +45,7 @@ class PathFinding :
             distance = 45
         speedCollision = self.m_collision_management.collisionSpeed(MAX_SPEED - MAX_SPEED * (distance/DISTANCE_INTERSECTION))
         old_speed = self.speed
-        self.speed = min(speedCollision, self.speed + delta*ACCELERATION) #MAX_SPEED*(0.5*self.phaseVirage+0.5),
+        self.speed = min(speedCollision, self.speed + delta*ACCELERATION)
 
         self.path_color = self.color_cs.dominantColor3()
 
