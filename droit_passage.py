@@ -4,7 +4,7 @@ import time
 SECURITY_DISTANCE = 100                                             #Distance to travel from the beginning of the way to the end of the intersection
 
 class DPassage:
-    """"""
+    """Class used to manage the right to cross the way where the robot is currently"""
 
     def __init__(self, ip):
         self.isAllowedToPass = False                                #False if the robot is not allowed to pass the intersection, else True
