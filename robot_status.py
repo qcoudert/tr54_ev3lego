@@ -1,6 +1,10 @@
 import time
 from pybricks.tools import print
+
 class RobotStatus:
+    """Object used to gather the different informations of the robot status
+
+    Have only been used to get logs during the TPs. Sorry RobotStatus..."""
 
     def __init__(self, color, distance, speed):
         self.color = color
@@ -33,12 +37,19 @@ class DistanceTracker:
     To find the distance travelled by the robot, call DistanceTracker.distanceTraveled()"""
 
     def __init__(self, pilot):
-        self.pilot = pilot
-        self.lastRegisteredSpeed = pilot.speed
+        self.pilot = pilot                          #We need the current Pilot for the robot to get the current speed of the robot
+        self.lastRegisteredSpeed = pilot.speed      #Last known speed of the robot
+        self.timeBegin = time.time()                #The date where the robot started to go at lastRegisteredSpeed
+        self.log = []                               #List of the different TimedPositions the robot had from the initialization of this object
+
+    def flush(self):
+        """Reinitialize the object to track a new distance"""
+        self.lastRegisteredSpeed = self.pilot.speed
         self.timeBegin = time.time()
         self.log = []
 
     def update(self):
+        """Get the current speed of the robot and add it as a TimedPosition"""
         if(self.lastRegisteredSpeed!= self.pilot.speed * self.pilot.dist_proportion):
             self.timeEnd = time.time()
             tp = TimedPosition(self.timeBegin, self.timeEnd, self.lastRegisteredSpeed)
@@ -46,11 +57,10 @@ class DistanceTracker:
             self.lastRegisteredSpeed = self.pilot.speed * self.pilot.dist_proportion
             self.timeBegin = self.timeEnd
 
-    """Time to travel to the end at 850: 5.3"""
-    """Time to travel to the end at 425: 8.80"""
-    #10cm par tour de roue soit 10cm/360 soit 0.0277
-    #La zone fait 120cm
     def distanceTraveled(self):
+        """Compute the current distance traveled from the log list of TimedPosition
+        
+        We used the assomption that a complete turn from the wheel made the robot move for 10cm."""
         totaltime = 0
         totaldist = 0
 
@@ -66,14 +76,10 @@ class DistanceTracker:
 
         return [totaldist, totaltime]
 
-    def __arrayMean(self, arr):
-        size = len(arr)
-        total = 0
-        for a in arr:
-            total += a
-        return total/size
-
 class TimedPosition:
+    """Object containing the speed of the robot between timeBegin and timeEnd
+    
+    This object is only used in DistanceTracker to fill the log list"""
 
     def __init__(self, timeBegin, timeEnd, speed):
         self.timeBegin = timeBegin

@@ -1,6 +1,12 @@
 # Copyright 2007 Google Inc.
 #  Licensed to PSF under a Contributor Agreement.
 
+
+"""Imported module to convert the IP addresses from bytes to string
+
+Library is not updated, so we make the library come to the mindstorms.
+"""
+
 """A fast, lightweight IPv4/IPv6 manipulation library in Python.
 
 This library is used to create/poke/manipulate IPv4 and IPv6 addresses

@@ -6,7 +6,7 @@ import ipaddress
 class NetworkListener(Thread):
     """Class allowing users to listen any message that came through network
 
-    This class is using a socket to listen any UDP broadcast sent to the port 37020.
+    This class is using a socket to listen any UDP broadcast sent to the port 37030.
     This listener is running asynchronously and should be started with NetworkListener.start()
     """
 
@@ -31,23 +31,24 @@ class NetworkListener(Thread):
             print("OSError: {0}".format(err))
         
         #Get address from bytes
-        addr = str(ipaddress.IPv4Address(addr[4:8]))
-        print('----------------')
-        print('Received message')
-        print(self.ip)
-        print(addr)
-        print('----------------')
+        if(addr):
+            addr = str(ipaddress.IPv4Address(addr[4:8]))
 
         #If the address from receiver is different from sender then we store the message
         if((data!=None) and (addr != self.ip)):
             self.mailbox.append(data.decode('utf-8'))
 
     def run(self):
+        """Loop used by the listener thread"""
         while(1):
             self.__listen()
 
 class MessageSender:
+    """Class used to send messages to the server
 
+    This class is using a socket to broadcast messages through the port 37020.
+    It works synchronously and is non blocking.
+    """
     def __init__(self, ip):
         """Initialize the object
 

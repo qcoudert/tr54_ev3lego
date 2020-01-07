@@ -9,15 +9,16 @@ class Pilot:
     """Pilot class allowing user to drive the robot"""
     
     def __init__(self):
-        self.speed = 0
-        self.dist_proportion = 1
-        self.angleSpeed = 0
-        self.turnItRight = 0
-        self.turnItLeft = 0
+        self.speed = 0                      # speed of the robot in deg/s
+        self.dist_proportion = 1            # proportion of the speed put in the left motor
+        self.angleSpeed = 0                 # speed to substract to one wheel to make the robot turn
+        self.turnItRight = 0                # determine the current angle speed, the higher it is, the more it turns to the right
+        self.turnItLeft = 0                 # determine the current angle speed, the higher it is, the more it turns to the left
         self.left_motor = Motor(Port.B)
         self.right_motor = Motor(Port.C)
 
     def forward(self, speed):
+        """Make the robot go forward at 'speed' in deg/s"""
         self.speed = speed
         self.dist_proportion = 1
         self.angleSpeed = 0
@@ -99,7 +100,11 @@ class Pilot:
         return self
 
     def forwardTurn2(self, speedPercentage, angle):
-        # angle -100 to 100
+        """Make the robot turns making a curve
+
+        speedPercentage : the speed in percent of the robot
+        angle : (-100 to 100) an relative angle, the more it is high, the more the robot turn"""
+
         self.speed = MAX_SPEED * (speedPercentage/100)
         relativeAngle = (self.speed * angle) / 100
         if(angle<0):
@@ -121,21 +126,9 @@ class Pilot:
         self.left_motor.run(self.speed)
         self.right_motor.run(self.speed)
 
-    def rotate(self, angle, aSpeed):
-        self.left_motor.run_target(aSpeed, angle, Stop.BRAKE, False)
-        self.right_motor.run_target(aSpeed, -angle, Stop.BRAKE, True)
-
-    def rotateR(self, speed):
-        s = MAX_SPEED * (speed/100)
-        self.right_motor.run(s)
-
-    def rotateL(self, speed):
-        s = MAX_SPEED * (speed/100)
-        self.left_motor.run(s)
-
     
     def stop(self):
-        """Make the robot stop mooving by stoping all the motors."""
+        """Make the robot stop moving by stoping all the motors."""
         self.speed = 0
         self.dist_proportion = 1
         self.left_motor.stop()

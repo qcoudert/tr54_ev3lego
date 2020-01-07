@@ -2,80 +2,28 @@ from pybricks.ev3devices import ColorSensor
 from pybricks.parameters import (Port, Color)
 from pybricks.tools import print, wait
 
-
-
+COLOR_PROBABILITY_TIME_LIMIT = 3
+COLOR_GREEN_PROBA_THRESH = 0.6
+COLOR_RED_PROBA_THRESH = 0.6
 
 class CSensor:
     
 
     def __init__(self):
+
         self.sensor = ColorSensor(Port.S3)
 
-        self.dominantColorTab = []
-
-        self.colorTab = []
-        self.colorTab2 = []
-
-        self.colorTab.append((0,0,0,0, Color.BLACK))
-        self.colorTab.append((1,30,30,30, Color.BLACK))
-
-        self.colorTab.append((0,51,60,80, Color.WHITE))
-        self.colorTab.append((1,100,100,100, Color.WHITE))
-
-        self.colorTab.append((0,55,0,3, Color.RED))
-        self.colorTab.append((1,80,20,7, Color.RED))
-
-        self.colorTab.append((0,30,55,20, Color.GREEN))
-        self.colorTab.append((1,36,62,23, Color.GREEN))
-
-        self.colorTab.append((0,7,30,63, Color.BLUE))
-        self.colorTab.append((1,10,33,67, Color.BLUE))
-# ---------------------
-        self.colorTab2.append((1,1,40, Color.BLACK))
-
-        self.colorTab2.append((1.2,1.6,100, Color.WHITE))
-
-        self.colorTab2.append((0.25,0.1,80, Color.RED))
-
-        self.colorTab2.append((2,0.66,60, Color.GREEN))
-
-        self.colorTab2.append((3,6.5,70, Color.BLUE))
+        self.dominantColorTab = []                  #List used for dominantSortingColor
+            
+        self.logColors = []                         #List used to store recently found colors 
 
 
     def color(self):
+        """Return the color detected by the native function of the sensor"""
         return self.sensor.color()
-
-    def color2(self):
-        color = self.sensor.rgb()
-        print(color)
-        color_type = None
-        for i in range (0, len(self.colorTab)/2) :
-            test = True
-            for j in range (0,3) :
-                if(color[j] < self.colorTab[i*2][j+1] or color[j] > self.colorTab[i*2+1][j+1] ):
-                    test = False
-            if(test == True):
-                return self.colorTab[i*2][4]
-        return None
-
-    def color3(self):
-        color = self.sensor.rgb()
-        color_type = None
-        for i in range (0, len(self.colorTab2)) :
-            test = True
-            if(color[0] > self.colorTab2[i][2] or color[1] > self.colorTab2[i][2] or color[2] > self.colorTab2[i][2]):
-                test = False
-            for j in range (0,2) :
-                if(color[1+j] * self.colorTab2[i][j]  < color[0] - self.colorTab2[i][j] * self.colorTab2[i][2]/10 or 
-                color[1+j] * self.colorTab2[i][j]  > color[0] + self.colorTab2[i][j] * self.colorTab2[i][2]/10):
-                    test = False
-            if(test == True):   
-                print(self.colorTab2[i][3])
-                return self.colorTab2[i][3]
-        print("None")
-        return None
-
+   
     def rgb(self):
+        """Return the sensor RGB values"""
         rgb = self.sensor.rgb()
         r = (rgb[0]/100)*255
         g = (rgb[1]/100)*255
@@ -83,6 +31,7 @@ class CSensor:
         return r,g,b
 
     def hsv(self):
+        """Convert RGB values into HSV values"""
         r, g, b = rgb[0]/255.0, rgb[1]/255.0, rgb[2]/255.0
         mx = max(r, g, b)
         mn = min(r, g, b)
@@ -102,37 +51,8 @@ class CSensor:
         v = mx
         return h, s, v
 
-    def dominantColor2(self):
-        rgb = self.rgb()
-        if(rgb[0] <30 and rgb[1] < 30 and rgb[2] <30):
-            return Color.BLACK
-        elif(rgb[0] + rgb[1] + rgb[2] > 510):
-            return Color.WHITE  
-        elif(rgb[1] > rgb[0] and rgb[1] > rgb[2]):
-            return Color.GREEN
-        elif(rgb[0] > rgb[1] and rgb[0] > rgb[2]):
-            return Color.RED
-        elif(rgb[2] > rgb[1] and rgb[2] > rgb[0]):
-            return Color.BLUE
-
-    def dominantColor(self):
-        rgb = self.rgb()
-        if(rgb[0] <30 and rgb[1] < 30 and rgb[2] <30):
-            return "BLACK"
-        elif(rgb[0] + rgb[1] + rgb[2] > 510):
-            return "WHITE"   
-        elif(rgb[1] > rgb[0] and rgb[1] > rgb[2]):
-            return "GREEN"
-        elif(rgb[0] > rgb[1] and rgb[0] > rgb[2]):
-               return "RED"
-        elif(rgb[2] > rgb[1] and rgb[2] > rgb[0]):
-               return "BLUE"
-
-    def color_difference (self, color1, color2):
-        return sum([abs(component1-component2) for component1, component2 in zip(color1, color2)])
-
-
     def rgb_to_hls(self, r, g, b):
+        """Convert rgb values to hsl values"""
         if (max(r, g, b) == 0):
             maxc = 0.002
         else:
@@ -141,7 +61,6 @@ class CSensor:
             minc = 0.001
         else:
             minc = min(r, g, b)
-        # XXX Can optimize (maxc+minc) and (maxc-minc)
         l = (minc+maxc)/2.0
         if minc == maxc:
             return 0.0, l, 0.0
@@ -161,46 +80,47 @@ class CSensor:
         h = (h/6.0) % 1.0
         return h, l, s
 
+    def color_difference (self, color1, color2):
+        """Return a list of all the differences of colors in other lists ([diff,diff2,diff3,etc])"""
+        return sum([abs(component1-component2) for component1, component2 in zip(color1, color2)])
+
     def dominantColor3(self):
+        """Return the number value of BLUE, BLACK or WHITE > This function is used for following the path
+        
+        This function compare and take the nearest color
+        """
         rgb = self.rgb()
-        #print(rgb)
-        #TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 215, 0), "BLUE": (0, 0, 255), "BLACK": (0, 0, 0), "WHITE": (255, 255, 255)}
-        TARGET_COLORS = {"RED": (180, 40, 30, 109), "GREEN": (97, 103, 67, 85), "BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
-        SWITCHER_COLOR = {"RED": Color.RED, "GREEN": Color.GREEN, "BLUE": Color.BLUE, "BLACK": Color.BLACK, "WHITE": Color.WHITE}
+        #Color references
+        TARGET_COLORS = {"BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
+        SWITCHER_COLOR = {"BLUE": Color.BLUE, "BLACK": Color.BLACK, "WHITE": Color.WHITE}
         rgb_list = list(rgb)
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
         rgb_list.append(hsl_color[1])
         my_color = tuple(rgb_list)
-        #print(my_color)
         differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
         differences.sort() 
         my_color_name = differences[0][1]
-        #print(hsl_color)
         return SWITCHER_COLOR.get(my_color_name, -1)
 
     def dominantColor4(self):
+        """Same function as dominantColor3 but white red and green"""
         rgb = self.rgb()
-        #print(rgb)
-        #TARGET_COLORS = {"RED": (255, 0, 0), "GREEN": (0, 215, 0), "BLUE": (0, 0, 255), "BLACK": (0, 0, 0), "WHITE": (255, 255, 255)}
-        TARGET_COLORS = {"RED": (180, 40, 30, 109), "GREEN": (97, 103, 67, 85), "BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
+        TARGET_COLORS = {"RED": (180, 40, 30, 109), "GREEN": (92, 154, 50, 102), "BLUE": (23, 53, 210, 117), "BLACK": (9, 9, 7, 9), "WHITE": (167, 144, 255, 199)}
         rgb_list = list(rgb)
         hsl_color = self.rgb_to_hls(rgb[0], rgb[1], rgb[2])
         rgb_list.append(hsl_color[1])
         my_color = tuple(rgb_list)
-        print(my_color)
         differences = [[self.color_difference(my_color, target_value), target_name] for target_name, target_value in TARGET_COLORS.items()]
         differences.sort() 
         my_color_name = differences[0][1]
-        #print(hsl_color)
-        print(my_color_name)
         return my_color_name
 
-
     def dominantSortingColor(self):
+        """Use dominantColor4 to take a list of 5 colors and choose the most viewed color in this list"""
         my_color = self.dominantColor4()
-        wait(10)
+        wait(15)
         self.dominantColorTab.append(my_color)
-        if(len(self.dominantColorTab) == 10):
+        if(len(self.dominantColorTab) == 5):
             setlist = set(sorted(self.dominantColorTab))
             b = [self.dominantColorTab.count(el) for el in setlist]
             pos = b.index(max(b))
@@ -211,17 +131,55 @@ class CSensor:
             return "N/A"
 
     def dominantSortingColor2(self):
+        """Same as dominantSortingColor but return the number of the color"""
         my_color = self.dominantColor4()
-        wait(10)
         self.dominantColorTab.append(my_color)
         SWITCHER_COLOR = {"RED": Color.RED, "GREEN": Color.GREEN, "BLUE": Color.BLUE, "BLACK": Color.BLACK, "WHITE": Color.WHITE}
-        if(len(self.dominantColorTab) == 10):
+        if(len(self.dominantColorTab) == 5):
             setlist = set(sorted(self.dominantColorTab))
             b = [self.dominantColorTab.count(el) for el in setlist]
             pos = b.index(max(b))
             new_list = list(setlist)
             self.dominantColorTab.clear()
+            wait(10)
             return SWITCHER_COLOR.get(new_list[pos], -1)
         else:
+            wait(10)
             return "N/A"
+
+    #-- COLOR FINDING WITH PROBABILITIES --#
+
+    def updateColorProbability(self):
+        """Update the list of recently found colors
+        
+        There may be COLOR_PROBABILITY_TIME_LIMIT colors in the log list at the same time."""
+
+        c = self.dominantColor3()
+        
+        while(self.logColors and (len(self.logColors)>COLOR_PROBABILITY_TIME_LIMIT)):
+            self.logColors.pop(0)
+        
+        self.logColors.append(c)
+
+    def greenColorProbability(self):
+        """Return the percentage of green colors stored in the log list"""
+        return float(self.logColors.count(Color.GREEN))/float(len(self.logColors))
+
+    def redColorProbability(self):
+        """Return the percentage of red colors stored in the log list"""
+        return float(self.logColors.count(Color.RED))/float(len(self.logColors))
+
+    def isRedOrGreen(self):
+        """Find if the current color is Red, Green or none of them.
+
+        The Green or Red color are confirmed only if the current probability is above, respectively, COLOR_GREEN_PROBA_THRESH and COLOR_RED_PROBA_THRESH"""
+        
+        c = self.dominantColor3()
+        if(c == Color.GREEN and self.greenColorProbability()>COLOR_GREEN_PROBA_THRESH):
+            return Color.GREEN
+        elif(c == Color.RED and self.redColorProbability()>COLOR_RED_PROBA_THRESH):
+            return Color.RED
+        else:
+            return None
+
 
