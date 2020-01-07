@@ -32,6 +32,7 @@ class PathFinding :
         self.speed = min(speedCollision, self.speed + delta*ACCELERATION) 
 
         self.path_color = self.color_cs.dominantColor3()
+        self.path_color_trigger = self.color_cs.dominantSortingColor2()
 
         self.pathfindingStrategy(delta)
     
@@ -48,6 +49,7 @@ class PathFinding :
         self.speed = min(speedCollision, self.speed + delta*ACCELERATION)
 
         self.path_color = self.color_cs.dominantColor3()
+        self.path_color_trigger = self.color_cs.dominantSortingColor2()
 
         self.pathfindingStrategy(delta)
 
@@ -65,6 +67,8 @@ class PathFinding :
             self.pilote.forwardRelative(self.speed)
         elif(self.path_color==Color.BLACK):
             self.pilote.forwardTurn2(self.speed, -ANGLE_MAX + (ANGLE_MAX-ANGLE_MIN) * self.phaseVirage * self.phaseVirage)
+        elif(self.path_color_trigger==Color.GREEN):
+            self.pilote.forwardTurn2(self.speed, ANGLE_MIN + (ANGLE_MAX-ANGLE_MIN) - ANGLE_MAX * self.phaseVirage * self.phaseVirage)
 
         if(self.phaseVirage - (1/TURNING_TIME_MAX)*delta > 0):
             self.phaseVirage = self.phaseVirage - (1/TURNING_TIME_MAX)*delta

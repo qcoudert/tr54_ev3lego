@@ -1,6 +1,8 @@
 from pybricks.ev3devices import ColorSensor
 from pybricks.parameters import (Port, Color)
 from pybricks.tools import print, wait
+import time
+import csv
 
 COLOR_PROBABILITY_TIME_LIMIT = 3
 COLOR_GREEN_PROBA_THRESH = 0.6
@@ -30,6 +32,7 @@ class CSensor:
         b = (rgb[2]/100)*255
         return r,g,b
 
+    #Convert RGB values into HSV values
     def hsv(self):
         """Convert RGB values into HSV values"""
         r, g, b = rgb[0]/255.0, rgb[1]/255.0, rgb[2]/255.0
@@ -102,6 +105,7 @@ class CSensor:
         my_color_name = differences[0][1]
         return SWITCHER_COLOR.get(my_color_name, -1)
 
+    #Same function as dominantColor3 but white red and green
     def dominantColor4(self):
         """Same function as dominantColor3 but white red and green"""
         rgb = self.rgb()
@@ -130,6 +134,7 @@ class CSensor:
         else:
             return "N/A"
 
+    #Same as dominantSortingColor but return the number of the color
     def dominantSortingColor2(self):
         """Same as dominantSortingColor but return the number of the color"""
         my_color = self.dominantColor4()
@@ -146,6 +151,7 @@ class CSensor:
         else:
             wait(10)
             return "N/A"
+    
 
     #-- COLOR FINDING WITH PROBABILITIES --#
 
